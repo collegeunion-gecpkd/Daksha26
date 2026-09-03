@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 
 import "./Navbar.scss";
-import Logo from "../assets/daskaha24LogoWeb.png";
+import Logo from "../assets/DakshaLogoWeb.png";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,7 +21,7 @@ function Navbar() {
       <div className="nav--container">
         <Link to="/">
           <div className="nav--logo">
-            <img className="logo" src={Logo} alt="Daksha24 Logo" />
+            <img className="logo" src={Logo} alt="Daksha26 Logo" />
           </div>
         </Link>
         <nav className={`nav--links ${isMenuOpen && "active"}`}>
@@ -50,7 +50,7 @@ function Navbar() {
           <input
             className="menu-icon__cheeckbox"
             checked={isMenuOpen}
-            onChange={() => {}}
+            onChange={() => { }}
             onClick={() => toggleChecked(false)}
             type="checkbox"
           />

@@ -7,11 +7,11 @@ function Landing() {
   return (
     <div className="Landing">
       <section className="Hero">
-        <p>ADVAYA COLLEGE UNION PRESENTS</p>
+        <p>SECULAR COLLEGE UNION PRESENTS</p>
         <img src={DakshaFont} alt="Daksha" />
         <h4>ARTS FEST</h4>
-        <p className="month">MARCH</p>
-        <h3>5 6 7</h3>
+        <p className="month">SEPTEMBER</p>
+        <h3>22 23 24</h3>
         <p>GEC PALAKKAD</p>
         <a href="https://drive.google.com/file/d/18av_nSavGaPboWRiNu1ACp-oZCtJ5x4O/view?usp=sharing" target="_blank">See Guidelines</a>
       </section>
