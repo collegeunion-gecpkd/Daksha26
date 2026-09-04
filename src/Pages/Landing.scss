@@ -7,7 +7,8 @@
 // Scroll Architecture:
 //   .landing-scroll-root  — 200vh; --progress 0→1 over 1vh of scroll
 //   .bg-pin               — sticky 100vh stage (image + hero + info)
-//   .bg-shift             — pans the photograph left with --progress
+//   .bg-shift             — pans the photograph; bg2 is flipped (scaleX(-1))
+//                           so face appears on right, dark canvas on left
 // ============================================================
 
 .landing {
@@ -20,10 +21,12 @@
   &--revealed {
     opacity: 1;
 
-    .anim-fade-in-down  { opacity: 1; transform: translateY(0); }
-    .anim-reveal-left   { opacity: 1; transform: translateX(0) translateY(-50%); }
-    .anim-fade-in-up    { opacity: 1; transform: translateY(0); }
-    .anim-fade-in-right { opacity: 1; transform: translateX(0); }
+    .anim-fade-in-down        { opacity: 1; transform: translateY(0); }
+    .anim-reveal-left         { opacity: 1; transform: translateX(0) translateY(-50%); }
+    .anim-fade-in-up          { opacity: 1; transform: translateY(0); }
+    .anim-fade-in-right       { opacity: 1; transform: translateX(0); }
+    .anim-fade-in-up-delayed  { opacity: 1; transform: translateY(0); }
+    .anim-vline               { transform: scaleY(1); opacity: 0.18; }
 
     .scroll-hint.anim-fade-in-up {
       opacity: calc(1 - min(1, var(--progress, 0) * 4));
@@ -32,13 +35,18 @@
   }
 }
 
+// ── Scroll root ───────────────────────────────────────────────
 .landing-scroll-root {
   position: relative;
   height: 200vh;
   --progress: 0;
-  --pan-distance: -64vw;
+  // Pan the 200vw canvas exactly one viewport width to the left.
+  // At progress=0 → dakshaBG fills the screen.
+  // At progress=1 → bg2 fills the screen.
+  --pan-distance: 100vw;
 }
 
+// ── Stage ─────────────────────────────────────────────────────
 .bg-pin {
   position: sticky;
   top: 0;
@@ -47,53 +55,104 @@
   background-color: $color-black;
 }
 
+// ── Background canvas — 200vw horizontal strip ────────────────
+// [  dakshaBG (0–100vw)  |  bg2 (100–200vw)  ]
+// Pans left by 100vw as --progress goes 0→1.
 .bg-shift {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 200vw;          // two viewports wide
+  height: 100%;
   z-index: $z-hero-image;
   will-change: transform;
-  transform: translate3d(calc(var(--progress, 0) * var(--pan-distance)), 0, 0);
+  transform: translate3d(
+    calc(var(--progress, 0) * -100vw),
+    0, 0
+  );
 }
 
+// Shared image base
 .bg-img {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
   height: 100%;
+  width: 100vw;          // each panel = one viewport wide
   object-fit: cover;
-  object-position: 82% center;
-  animation: kenBurns 24s $ease-expo-out forwards;
+
+  // Left panel — dakshaBG.jpg: face on right, dark left canvas
+  &--hero {
+    left: 0;
+    object-position: 82% center;
+    animation: kenBurns 28s $ease-expo-out forwards;
+  }
+
+  // Right panel — bg2.png: face on left, dark space on right
+  // Placed exactly at 100vw so it appears as the user pans right
+  &--pan {
+    left: 100vw;
+    object-position: 20% center; // show face (left side of bg2)
+    animation: kenBurns 28s $ease-expo-out forwards 0.5s;
+  }
 }
 
+// ── Gradient overlays (viewport-fixed, not canvas-relative) ───
 .bg-overlay {
   position: absolute;
   inset: 0;
   z-index: $z-hero-overlay;
   pointer-events: none;
 
+  // Left vignette — protects hero text on dakshaBG; fades as bg2 arrives
   &--left {
     background: linear-gradient(
       105deg,
       rgba(0, 0, 0, 0.97) 0%,
-      rgba(0, 0, 0, 0.82) 28%,
-      rgba(0, 0, 0, 0.40) 52%,
-      rgba(0, 0, 0, 0.04) 100%
+      rgba(0, 0, 0, 0.80) 28%,
+      rgba(0, 0, 0, 0.28) 56%,
+      rgba(0, 0, 0, 0.00) 100%
     );
-    opacity: calc(1 - var(--progress, 0));
+    // At progress=0: full strength. Stays mostly until bg2 takes over.
+    opacity: calc(1 - var(--progress, 0) * 0.55);
   }
 
+  // Right vignette — grows as bg2 comes in; gives info panel a dark canvas
   &--right {
     background: linear-gradient(
       255deg,
-      rgba(0, 0, 0, 0.96) 0%,
+      rgba(0, 0, 0, 0.97) 0%,
       rgba(0, 0, 0, 0.82) 30%,
-      rgba(0, 0, 0, 0.30) 58%,
-      rgba(0, 0, 0, 0.02) 100%
+      rgba(0, 0, 0, 0.25) 60%,
+      rgba(0, 0, 0, 0.00) 100%
     );
-    opacity: calc(var(--progress, 0));
+    opacity: calc(var(--progress, 0) * 1.2);
+  }
+
+  // Top vignette — always present to keep navbar legible
+  &--top {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.75) 0%,
+      rgba(0, 0, 0, 0.18) 18%,
+      transparent 40%
+    );
+    opacity: 1;
   }
 }
 
+// ── Film grain ────────────────────────────────────────────────
+.bg-grain {
+  position: absolute;
+  inset: 0;
+  z-index: $z-hero-vignette;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+// ── Sections ──────────────────────────────────────────────────
 .section-hero,
 .section-info {
   position: absolute;
@@ -103,18 +162,20 @@
   overflow: hidden;
 }
 
+// Hero layer: fades + drifts left during scroll
 .hero-layer {
   position: absolute;
   inset: 0;
-  opacity: calc(1 - var(--progress, 0));
-  transform: translate3d(calc(var(--progress, 0) * -28px), 0, 0);
+  opacity: calc(1 - var(--progress, 0) * 1.4);
+  transform: translate3d(calc(var(--progress, 0) * -40px), 0, 0);
   pointer-events: none;
 }
 
+// Info section: fades in + slides from right
 .section-info {
   z-index: $z-hero-scroll;
   opacity: var(--progress, 0);
-  transform: translate3d(calc((1 - var(--progress, 0)) * 36px), 0, 0);
+  transform: translate3d(calc((1 - var(--progress, 0)) * 48px), 0, 0);
   pointer-events: none;
 }
 
@@ -122,6 +183,29 @@
   pointer-events: auto;
 }
 
+// ── Decorative vertical rule ──────────────────────────────────
+.hero-vline {
+  position: absolute;
+  top: clamp(100px, 15vh, 160px);
+  bottom: clamp(100px, 15vh, 160px);
+  left: clamp(28px, 6vw, 90px);
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0.15) 80%,
+    transparent
+  );
+  transform-origin: top center;
+  transform: scaleY(0);
+  opacity: 0;
+  transition:
+    transform 1.6s $ease-expo-out 0.6s,
+    opacity   1.6s $ease-expo-out 0.6s;
+}
+
+// ── Corner texts ──────────────────────────────────────────────
 .corner-text {
   position: absolute;
   font-size: 0.65rem;
@@ -131,7 +215,6 @@
   line-height: 1.6;
 
   p { margin: 0; }
-
   .red-text { color: $color-red; }
 }
 
@@ -139,7 +222,7 @@
   top: clamp(28px, 4vh, 50px);
   left: clamp(28px, 4vw, 60px);
   padding-left: 10px;
-  border-left: 2px solid rgba(255, 255, 255, 0.25);
+  border-left: 2px solid rgba(255, 255, 255, 0.18);
 }
 
 .bottom-right {
@@ -149,6 +232,7 @@
   letter-spacing: 0.45em;
 }
 
+// ── Title fly ─────────────────────────────────────────────────
 .left-title {
   position: absolute;
   top: 50%;
@@ -169,17 +253,30 @@
     width: 100%;
     height: auto;
     display: block;
-    filter: drop-shadow(0 4px 32px rgba(0, 0, 0, 0.55));
+    filter: drop-shadow(0 4px 40px rgba(0, 0, 0, 0.6));
     user-select: none;
     -webkit-user-drag: none;
     animation: parallaxFloat 7s ease-in-out infinite 2.5s;
   }
 }
 
+// Tagline line below title logo
+.title-tagline {
+  margin: 0.85rem 0 0;
+  font-size: 0.6rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: $color-gray-400;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1s $ease-expo-out 1.2s, transform 1s $ease-expo-out 1.2s;
+}
+
 .is-panning .left-title .title-png {
   animation: none;
 }
 
+// ── Dates — bottom left ───────────────────────────────────────
 .bottom-left-dates {
   position: absolute;
   bottom: clamp(36px, 5vh, 64px);
@@ -191,6 +288,7 @@
   .dates-row {
     display: flex;
     align-items: flex-end;
+    gap: clamp(0.8rem, 1.6vw, 1.6rem);
 
     span {
       font-size: clamp(2.2rem, 4.2vw, 4rem);
@@ -199,8 +297,6 @@
       line-height: 1;
       padding-bottom: 4px;
       border-bottom: 2px solid $color-red;
-
-      &:not(:last-child) { margin-right: clamp(0.8rem, 1.6vw, 1.6rem); }
     }
   }
 
@@ -214,6 +310,7 @@
   }
 }
 
+// ── Scroll hint ───────────────────────────────────────────────
 .scroll-hint {
   position: absolute;
   bottom: clamp(36px, 5vh, 64px);
@@ -225,11 +322,12 @@
   &__line {
     width: 1px;
     height: 52px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
     animation: scrollLine 2s ease-in-out infinite;
   }
 }
 
+// ── Info panel ────────────────────────────────────────────────
 .info-panel {
   position: absolute;
   top: 50%;
@@ -241,10 +339,35 @@
   gap: 2.2rem;
 }
 
+// Red accent bar animates in as progress rises
+.info-accent-bar {
+  width: calc(var(--progress, 0) * 48px);
+  height: 2px;
+  background: $color-red;
+  max-width: 48px;
+  border-radius: 1px;
+}
+
+// Info desc — each line staggers via --progress
 .info-desc {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
+
+  .info-tagline {
+    transform: translateY(calc((1 - var(--progress, 0)) * 18px));
+    opacity: calc(var(--progress, 0) * 1.2);
+  }
+
+  .info-college {
+    transform: translateY(calc((1 - var(--progress, 0)) * 24px));
+    opacity: calc(var(--progress, 0) * 1.4);
+  }
+
+  .info-body {
+    transform: translateY(calc((1 - var(--progress, 0)) * 28px));
+    opacity: calc(var(--progress, 0) * 0.8);
+  }
 }
 
 .info-tagline {
@@ -272,6 +395,7 @@
   font-weight: 300;
 }
 
+// ── Navigation links ──────────────────────────────────────────
 .info-links {
   display: flex;
   flex-direction: column;
@@ -287,18 +411,23 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   text-decoration: none;
   color: $color-gray-500;
+  // Stagger entry: each link's --link-delay (0,1,2) shifts its timing
+  transform: translateX(
+    calc((1 - var(--progress, 0)) * (14px + calc(var(--link-delay, 0) * 6px)))
+  );
+  opacity: calc(max(0, var(--progress, 0) - var(--link-delay, 0) * 0.08) * 1.5);
   transition:
-    color 0.3s $ease-quart-out,
+    color        0.3s $ease-quart-out,
     padding-left 0.3s $ease-expo-out;
 
   &:hover,
   &:focus-visible {
     color: $color-white;
-    padding-left: 6px;
+    padding-left: 8px;
     outline: none;
 
     .info-link__number { color: $color-red; }
-    .info-link__arrow  { color: $color-red; transform: translateX(4px); }
+    .info-link__arrow  { color: $color-red; transform: translateX(6px); }
   }
 
   &__number {
@@ -314,7 +443,7 @@
     flex: 1;
     font-size: 0.82rem;
     font-weight: 400;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
@@ -330,9 +459,12 @@
   letter-spacing: 0.4em;
   color: $color-gray-400;
   text-transform: uppercase;
+  opacity: calc(var(--progress, 0) * 1.4);
+  transform: translateY(calc((1 - var(--progress, 0)) * 16px));
   .red-text { color: $color-red; }
 }
 
+// ── Entrance keyframe triggers ────────────────────────────────
 .anim-fade-in-down {
   opacity: 0;
   transform: translateY(-22px);
@@ -351,19 +483,29 @@
   transition: opacity 1s $ease-expo-out 1s, transform 1s $ease-expo-out 1s;
 }
 
-@media screen and (max-width: #{$bp-lg}) {
-  .landing-scroll-root { --pan-distance: -56vw; }
-  .left-title          { left: clamp(20px, 4vw, 40px); }
-  .top-left            { left: clamp(20px, 4vw, 40px); }
-  .bottom-left-dates   { left: clamp(20px, 4vw, 40px); }
-  .bottom-right        { right: clamp(20px, 4vw, 40px); }
-  .info-panel          { right: clamp(20px, 5vw, 50px); }
+.anim-fade-in-up-delayed {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1s $ease-expo-out 1.2s, transform 1s $ease-expo-out 1.2s;
 }
 
-@media screen and (max-width: #{$bp-md}) {
-  .landing-scroll-root { --pan-distance: -22vw; }
+// ── Responsive — tablet ───────────────────────────────────────────
+@media screen and (max-width: #{$bp-lg}) {
+  // --pan-distance stays 100vw; no change needed — always one viewport
+  .left-title        { left: clamp(20px, 4vw, 40px); }
+  .top-left          { left: clamp(20px, 4vw, 40px); }
+  .bottom-left-dates { left: clamp(20px, 4vw, 40px); }
+  .bottom-right      { right: clamp(20px, 4vw, 40px); }
+  .info-panel        { right: clamp(20px, 5vw, 50px); }
+  .hero-vline        { left: clamp(20px, 4vw, 40px); }
+}
 
-  .corner-text  { font-size: 0.55rem; }
+// ── Responsive — mobile ───────────────────────────────────────
+@media screen and (max-width: #{$bp-md}) {
+  // On mobile the two panels are still 100vw each; pan stays one viewport
+  .landing-scroll-root { --pan-distance: 100vw; }
+
+  .corner-text { font-size: 0.55rem; }
 
   .left-title {
     width: clamp(200px, 68vw, 320px);
@@ -373,11 +515,11 @@
   }
   .landing--revealed .left-title { transform: translateX(-50%) translateY(-50%); }
 
-  .scroll-hint { display: none; }
+  .title-tagline { display: none; }
+  .scroll-hint   { display: none; }
+  .hero-vline    { display: none; }
 
-  .section-info {
-    transform: none;
-  }
+  .section-info  { transform: none; }
 
   .info-panel {
     position: absolute;
@@ -388,27 +530,29 @@
     transform: none;
     width: 100%;
     padding: 2rem clamp(20px, 5vw, 36px) 3rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.95) 60%, transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 60%, transparent);
     box-sizing: border-box;
     gap: 1.2rem;
   }
 
-  .info-footer { display: none; }
+  .info-accent-bar { display: none; }
+  .info-footer     { display: none; }
 
   .bg-overlay--left,
   .bg-overlay--right {
     background: linear-gradient(
       to top,
       rgba(0, 0, 0, 0.95) 0%,
-      rgba(0, 0, 0, 0.5) 50%,
-      rgba(0, 0, 0, 0.1) 100%
+      rgba(0, 0, 0, 0.5)  50%,
+      rgba(0, 0, 0, 0.1)  100%
     );
   }
 
-  .bg-overlay--left { opacity: 1; }
+  .bg-overlay--left  { opacity: 1; }
   .bg-overlay--right { opacity: 0; }
 }
 
+// ── Reduced motion ────────────────────────────────────────────
 @media (prefers-reduced-motion: reduce) {
   .landing-scroll-root {
     height: auto;
@@ -421,20 +565,21 @@
     overflow: visible;
   }
 
-  .bg-shift,
-  .bg-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: auto;
-    height: 100vh;
+  // Collapse the 200vw canvas — only show the hero image
+  .bg-shift {
+    width: 100vw;
     transform: none;
     will-change: auto;
   }
 
-  .bg-img {
-    animation: none;
+  .bg-img--pan  { display: none; }
+  .bg-img--hero { animation: none; }
+
+  .bg-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: auto;
+    height: 100vh;
+    will-change: auto;
   }
 
   .section-hero,
@@ -454,15 +599,22 @@
     transform: none;
   }
 
-  .section-info {
-    background-color: $color-black;
-  }
+  .section-info { background-color: $color-black; }
 
   .scroll-hint { display: none; }
+  .hero-vline  { display: none; }
 
   .left-title .title-png,
   .title-fly { animation: none; transform: none !important; }
 
-  .bg-overlay--left { opacity: 1; }
+  .info-desc .info-tagline,
+  .info-desc .info-college,
+  .info-desc .info-body,
+  .info-footer,
+  .info-link  { opacity: 1; transform: none; }
+
+  .info-accent-bar { width: 48px; }
+
+  .bg-overlay--left  { opacity: 1; }
   .bg-overlay--right { opacity: 0; }
 }
