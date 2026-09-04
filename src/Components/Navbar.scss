@@ -1,213 +1,330 @@
-@import "../Variables.scss";
+@use '../styles/variables' as *;
 
-.nav--box {
-  width: 100%;
-  position: sticky;
+// ============================================================
+// DAKSHA '26 — Navbar
+//
+// Transparent bar: links and logo only, no glass panel.
+// On landing, the hero title flies into #daksha-nav-logo.
+// ============================================================
+
+.navbar {
+  position: fixed;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(5px);
-  z-index: 999;
+  left: 0;
+  right: 0;
+  z-index: $z-navbar;
+  background-color: transparent;
+  pointer-events: none;
+  transition:
+    opacity 0.45s $ease-quart-out,
+    transform 0.45s $ease-quart-out;
 
-  .nav--container {
+  &__container,
+  &__mobile-menu {
+    pointer-events: auto;
+  }
+
+  &--landing {
+    .navbar__nav,
+    .navbar__cta,
+    .navbar__hamburger {
+      opacity: var(--daksha-progress, 0);
+    }
+  }
+
+  &--scrolled {
+    background-color: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  // ── Container ───────────────────────────────────────────
+  &__container {
     display: flex;
-    width: 100%;
-    max-width: 1400px;
-    padding: 0 24px;
     align-items: center;
     justify-content: space-between;
-    margin: auto;
+    gap: 2rem;
+    width: 100%;
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 3rem);
+    height: 68px;
+  }
 
-    .nav--logo {
-      .logo {
-        height: 120px;
-        width: auto;
-        object-fit: contain;
-        user-select: none;
-      }
-    }
-    .nav--links {
-      ul {
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.15rem;
-        font-weight: 500;
-        text-align: center;
-        a,
-        li {
-          display: inline;
-          color: rgb(120, 120, 120);
-        }
-      }
+  // ── Logo ────────────────────────────────────────────────
+  &__logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s $ease-quart-out;
 
-      .nav--link {
-        a {
-          transition: $transition1;
-
-          &:is(:hover, :focus):not(.active) {
-            color: rgb(255, 255, 255);
-          }
-
-          &::after {
-            content: "";
-            display: block;
-            width: 0;
-            height: 4px;
-            border-radius: 3rem;
-            background-color: white;
-            position: relative;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: $transition1;
-          }
-        }
-        a.active {
-          color: rgb(255, 255, 255);
-
-          &::after {
-            width: 18px;
-          }
-        }
-      }
-    }
-    .nav--cta {
-      padding: 0.6rem 1.6rem;
-      border: none;
-      border-radius: 3rem;
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: white;
-      text-shadow: 0 0 15px black;
-      background-image: url("../assets/buttonbg.png");
-      background-size: 200%;
-      background-position: 10%;
-      transition: $transition1;
-      outline-offset: 4px;
-      outline: 1.5px solid rgba(255, 255, 255, 0.237);
-
-      &:is(:hover, :focus) {
-        background-position: 60%;
-        outline: 1.5px solid rgb(255, 255, 255);
-      }
-    }
-
-    .menu-icon {
-      position: relative;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      z-index: 2;
-      outline: 1.5px solid rgba(255, 255, 255, 0.237);
-      border-radius: 0.3rem;
-      display: none;
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      transition: $transition1;
-
-      .menu-icon__cheeckbox {
-        display: block;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        cursor: pointer;
-        z-index: 2;
-        -webkit-touch-callout: none;
-        position: absolute;
-        opacity: 0;
-      }
-      div {
-        margin: auto;
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        width: 22px;
-        height: 12px;
-      }
-      span {
-        position: absolute;
-        display: block;
-        width: 100%;
-        height: 2px;
-        background-color: #ffffff;
-        border-radius: 1px;
-        transition: $transition1;
-
-        &:first-of-type {
-          top: 0;
-        }
-        &:last-of-type {
-          bottom: 0;
-        }
-      }
-      .menu-icon__cheeckbox:checked + div {
-        span {
-          &:first-of-type {
-            transform: rotate(45deg);
-            top: 5px;
-          }
-          &:last-of-type {
-            transform: rotate(-45deg);
-            bottom: 5px;
-          }
-        }
-      }
-      &:has(.menu-icon__cheeckbox:checked) {
-        outline: 1.5px solid rgb(255, 255, 255);
-      }
+    &--visible {
+      opacity: 1;
+      pointer-events: auto;
     }
   }
-}
 
-@media screen and (max-width: 740px) {
-  .nav--cta {
+  &__logo-img {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
+    user-select: none;
+  }
+
+  // On landing the hero PNG is the visible logo until it lands
+  &--landing &__logo-img {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &--landing &__logo-img {
+      opacity: 1;
+    }
+  }
+
+  // ── Desktop Nav Links ─────────────────────────────────────
+  &__nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 2.8rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__link {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.45);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.25s $ease-quart-out;
+    position: relative;
+
+    // Sliding red underline
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 0;
+      height: 1px;
+      background-color: $color-red;
+      transition: width 0.3s $ease-expo-out;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: $color-white;
+      outline: none;
+      &::after { width: 100%; }
+    }
+
+    &--active {
+      color: $color-white;
+      &::after { width: 100%; }
+    }
+  }
+
+  // ── CTA ───────────────────────────────────────────────────
+  &__cta {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 1.4rem;
+    border: 1px solid rgba(204, 0, 0, 0.6);
+    border-radius: 50px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: rgba(204, 0, 0, 0.06);
+    transition:
+      border-color 0.25s $ease-quart-out,
+      color 0.25s $ease-quart-out,
+      background-color 0.25s $ease-quart-out,
+      box-shadow 0.25s $ease-quart-out;
+
+    &:hover,
+    &:focus-visible {
+      border-color: $color-red;
+      color: $color-white;
+      background-color: rgba(204, 0, 0, 0.18);
+      box-shadow: 0 0 16px rgba(204, 0, 0, 0.2);
+      outline: none;
+    }
+  }
+
+  // ── Hamburger (mobile only) ────────────────────────────────
+  &__hamburger {
     display: none;
-  }
-  .nav--box {
-    .nav--container {
-      .menu-icon {
-        display: inline-block;
-      }
-      .nav--logo {
-        .logo {
-          height: 100px;
-          width: auto;
-          object-fit: contain;
-          user-select: none;
-        }
-      }
+    position: relative;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s $ease-quart-out;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover,
+    &:focus-visible {
+      border-color: rgba(255, 255, 255, 0.3);
+      outline: none;
+    }
+
+    &--open {
+      border-color: rgba(255, 255, 255, 0.25);
     }
   }
 
-  .nav--links {
+  &__hamburger-bar {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 1px;
+    transition: transform 0.3s $ease-quart-out, opacity 0.3s $ease-quart-out;
+
+    .navbar__hamburger--open &:first-child {
+      transform: translateY(3.75px) rotate(45deg);
+    }
+
+    .navbar__hamburger--open &:last-child {
+      transform: translateY(-3.75px) rotate(-45deg);
+    }
+  }
+
+  // ── Mobile menu overlay ────────────────────────────────────
+  &__mobile-menu {
     position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
+    inset: 0;
+    z-index: $z-mobile-menu;
+    background: linear-gradient(
+      160deg,
+      rgba(5, 5, 5, 0.99) 0%,
+      rgba(12, 5, 5, 0.99) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
 
-    ul {
-      width: 100vw;
-      height: 0;
-      visibility: hidden;
-      flex-direction: column;
-      opacity: 0;
-      transition: $transition2;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.35s $ease-quart-out,
+      visibility 0.35s $ease-quart-out;
+
+    &--open {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  // Logo inside the mobile menu
+  &__mobile-logo {
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+  }
+
+  &__mobile-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__mobile-link {
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    text-decoration: none;
+    transition: color 0.25s $ease-quart-out;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-white;
+      outline: none;
     }
 
-    &.active {
-      ul {
-        height: 100vh;
-        visibility: visible;
-        background-color: rgba(0, 0, 0, 0.97);
-        opacity: 1;
-      }
+    &--active {
+      color: $color-white;
+    }
+  }
+
+  &__mobile-cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 2.4rem;
+    border: 1px solid $color-red;
+    border-radius: 50px;
+    color: $color-red;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.25s $ease-quart-out,
+      color 0.25s $ease-quart-out;
+
+    &:hover,
+    &:focus-visible {
+      background-color: $color-red;
+      color: $color-white;
+      outline: none;
     }
   }
 }
 
-.menu--open {
-  overflow: hidden;
-  height: 100vh;
+// ── Responsive ─────────────────────────────────────────────
+@media screen and (max-width: #{$bp-lg}) {
+  .navbar {
+    &__nav,
+    &__cta {
+      display: none;
+    }
+
+    &__hamburger {
+      display: inline-flex;
+    }
+
+    &__logo {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    &--landing &__logo-img {
+      opacity: 0;
+    }
+  }
 }

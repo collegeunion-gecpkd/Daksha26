@@ -3,30 +3,58 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="theme-color" content="#000000" />
-  <link rel="manifest" href="./manifest.json" />
-  <link href=" https://cdn.jsdelivr.net/npm/typeface-poppins@1.1.13/index.min.css " rel="stylesheet">
-  <link rel="icon" type="image/png" href="/daksha.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daksha'26</title>
+  <meta name="theme-color" content="#090909" />
+
+  <!-- SEO -->
+  <title>Daksha'26 — Arts Fest | GEC Palakkad</title>
+  <meta name="description" content="Daksha'26 is the annual Arts Fest of Government Engineering College Palakkad, presented by the Secular College Union. September 22, 23 & 24." />
+  <meta name="keywords" content="Daksha, Daksha 26, Arts Fest, GEC Palakkad, Government Engineering College Palakkad, Secular College Union, Kerala arts fest" />
+  <meta name="author" content="Secular College Union, GEC Palakkad" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Daksha'26 — Arts Fest | GEC Palakkad" />
+  <meta property="og:description" content="Daksha'26 — The annual Arts Fest of Government Engineering College Palakkad. 22 · 23 · 24 September." />
+  <meta property="og:image" content="/icon-512x512.png" />
+  <meta property="og:url" content="https://daksha.gecpkd.ac.in" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- Twitter card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Daksha'26 — Arts Fest | GEC Palakkad" />
+  <meta name="twitter:description" content="The annual Arts Fest of Government Engineering College Palakkad. 22 · 23 · 24 September." />
+  <meta name="twitter:image" content="/icon-512x512.png" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" href="/daksha.png" />
+  <link rel="apple-touch-icon" href="/icon-192x192.png" />
+
+  <!-- Fonts: Poppins from Google Fonts (replaces broken jsdelivr CDN URL) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Service Worker registration -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('worker.js').then(function (registration) {
-          console.log('Worker registration successful', registration.scope);
+          console.log('SW registered', registration.scope);
         }, function (err) {
-          console.log('Worker registration failed', err);
-        }).catch(function (err) {
-          console.log(err);
+          console.warn('SW registration failed', err);
         });
       });
-    } else {
-      console.log('Service Worker is not supported by browser.');
     }
   </script>
 </body>

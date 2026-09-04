@@ -1,12 +1,13 @@
-import React from "react";
-
 import "./Spinner.scss";
-import Loading from "../assets/loadingAnim.gif";
 
+/**
+ * Pure CSS spinner — replaces the 529KB loadingAnim.gif.
+ * Uses role="status" and aria-label for screen reader support.
+ */
 function Spinner() {
   return (
-    <div className="loader-box">
-      <img className="loader" src={Loading} alt="Loading . . ." />
+    <div className="spinner" role="status" aria-label="Loading">
+      <span className="spinner__ring" aria-hidden="true" />
     </div>
   );
 }

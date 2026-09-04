@@ -1,0 +1,56 @@
+// ============================================================
+// DAKSHA '26 — Design Tokens
+// ============================================================
+
+// ---- Palette -----------------------------------------------
+$color-black:        #090909;
+$color-black-rich:   #000000;
+$color-white:        #f0f0f0;
+$color-white-pure:   #ffffff;
+
+// Red accent — use sparingly
+$color-red:          #cc0000;
+$color-red-bright:   #e80000;
+$color-red-muted:    rgba(204, 0, 0, 0.7);
+
+// Neutral grays (relative to black background)
+$color-gray-100:     rgba(255, 255, 255, 0.06);
+$color-gray-200:     rgba(255, 255, 255, 0.1);
+$color-gray-300:     rgba(255, 255, 255, 0.2);
+$color-gray-400:     rgba(255, 255, 255, 0.35);
+$color-gray-500:     rgba(255, 255, 255, 0.5);
+$color-gray-600:     rgba(255, 255, 255, 0.65);
+$color-gray-700:     rgba(255, 255, 255, 0.8);
+
+// ---- Typography --------------------------------------------
+$font-body:          'Poppins', sans-serif;
+
+// ---- Easing ------------------------------------------------
+$ease-expo-out:      cubic-bezier(0.22, 1, 0.36, 1);
+$ease-quart-out:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-in-out:        cubic-bezier(0.65, 0, 0.35, 1);
+
+// Reusable transition shorthands (keep parity with old Variables.scss)
+$transition1:        all 0.2s $ease-quart-out;
+$transition2:        all 0.4s $ease-quart-out;
+
+// ---- Breakpoints -------------------------------------------
+$bp-sm:   480px;
+$bp-md:   768px;
+$bp-lg:   1024px;
+$bp-xl:   1280px;
+
+// ---- Z-index layers ----------------------------------------
+$z-hero-bg:       0;
+$z-hero-image:    1;
+$z-hero-overlay:  2;
+$z-hero-vignette: 3;
+$z-hero-content:  4;
+$z-hero-scroll:   5;
+$z-navbar:        999;
+$z-mobile-menu:   998;
+$z-title-fly:     1000;
+
+// ---- Spacing -----------------------------------------------
+$page-padding-x:  clamp(1.25rem, 5vw, 5rem);
+$max-width:       1400px;

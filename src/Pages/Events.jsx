@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Spinner from "../Components/Spinner";
 import "./Events.scss";
@@ -6,10 +6,12 @@ import "./Events.scss";
 function Events() {
   const [eventData, setEventData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setIsLoading(true);
+    setError(null);
     fetch(
       "https://script.google.com/macros/s/AKfycbyGujyOWsqlnFyJGPzIvICGVBLW1yqp99YDkTsb_7a2575PG--75PYZdAD00T0ziwyM/exec?type=events"
     )
@@ -18,7 +20,10 @@ function Events() {
         setEventData(data.data);
         setIsLoading(false);
       })
-      .catch((error) => window.alert("Loading Failed"));
+      .catch(() => {
+        setError("Failed to load events. Please check your connection and try again.");
+        setIsLoading(false);
+      });
   }, []);
 
   const handleSearchChange = (event) => {
@@ -46,15 +51,22 @@ function Events() {
           placeholder="Search Event, Winner, Day, Stage"
           value={searchTerm}
           onChange={handleSearchChange}
+          aria-label="Search events"
         />
       </div>
+
+      {error && (
+        <p role="alert" style={{ textAlign: "center", color: "rgba(255,100,100,0.9)", padding: "2rem" }}>
+          {error}
+        </p>
+      )}
 
       {isLoading ? (
         <Spinner />
       ) : (
         <div className="event_box">
-          {filteredEvents.map((row, index) => (
-            <div className="event_card" key={index}>
+          {filteredEvents.map((row) => (
+            <div className="event_card" key={row.EventName}>
               <div className="mele">
                 <span className="eventDate"> {row.EventDate}</span>
                 <span className="eventState" data-state={row.EventState}>

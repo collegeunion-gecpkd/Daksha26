@@ -2,19 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-
 import "./main.scss";
+import ErrorBoundary from "./Components/ErrorBoundary";
 import Layout from "./Pages/Layout";
 import Landing from "./Pages/Landing";
 import Board from "./Pages/Board";
 import NoPage from "./Pages/NoPage";
 import Events from "./Pages/Events";
 
-export default function App() {
+function App() {
   return (
     <BrowserRouter>
       <Routes>
-          <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout />}>
           <Route index element={<Landing />} />
           <Route path="/board" element={<Board />} />
           <Route path="/events" element={<Events />} />
@@ -26,4 +26,8 @@ export default function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
+);

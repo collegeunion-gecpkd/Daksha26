@@ -1,19 +1,30 @@
-* {
+@use './styles/variables' as *;
+@use './styles/animations';
+
+// ---- Reset --------------------------------------------------
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  background-color: #000000;
-  background-image: url("./assets/dakshaBG.jpg");
-  background-repeat: no-repeat;
-  background-position: 60%;
-  background-size: cover;
-  color: white;
-  font-family: Poppins;
+// ---- Base ---------------------------------------------------
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  background-color: $color-black;
+  color: $color-white;
+  font-family: $font-body;
+  // NOTE: No background-image here — each page section manages its own BG
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ---- Globals ------------------------------------------------
 button,
 a {
   cursor: pointer;
@@ -23,4 +34,15 @@ a,
 li {
   list-style: none;
   text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+// ---- Focus styles (accessible, non-intrusive) ---------------
+:focus-visible {
+  outline: 2px solid $color-red;
+  outline-offset: 3px;
 }

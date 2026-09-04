@@ -1,15 +1,20 @@
-.loader-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  .loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    filter: grayscale(1) brightness(3);
-    mix-blend-mode: screen;
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 2rem;
+
+  &__ring {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-top-color: #cc0000;
+    border-radius: 50%;
+    animation: spinnerRotate 0.75s linear infinite;
   }
+}
+
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
 }

@@ -1,0 +1,91 @@
+// ============================================================
+// DAKSHA '26 — Keyframe Animations
+// ============================================================
+
+// Hero image: initial pop-in then slow cinematic settle
+@keyframes heroImageReveal {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+// Slow ambient background drift (ken-burns)
+// Goes from slightly scaled-in → natural size over a long duration
+@keyframes kenBurns {
+  from { transform: scale(1.04); }
+  to   { transform: scale(1.0);  }
+}
+
+// Universal reveal: opacity + upward slide
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Reveal from left
+@keyframes revealLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Reveal from right
+@keyframes revealRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Subtle ambient float for the title image
+@keyframes parallaxFloat {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+// Simpler fade for overlays
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// Scroll indicator: line draws down then resets
+@keyframes scrollLine {
+  0%   { transform: scaleY(0) translateY(0); opacity: 1; transform-origin: top; }
+  50%  { transform: scaleY(1) translateY(0); opacity: 1; transform-origin: top; }
+  51%  { transform-origin: bottom; }
+  100% { transform: scaleY(0) translateY(0); opacity: 0; transform-origin: bottom; }
+}
+
+// CSS spinner for loading states
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
+// Pulsing red glow for accent elements
+@keyframes redGlowPulse {
+  0%   { text-shadow: 0 0 20px rgba(204, 0, 0, 0.3); }
+  50%  { text-shadow: 0 0 40px rgba(204, 0, 0, 0.6), 0 0 80px rgba(204, 0, 0, 0.2); }
+  100% { text-shadow: 0 0 20px rgba(204, 0, 0, 0.3); }
+}
