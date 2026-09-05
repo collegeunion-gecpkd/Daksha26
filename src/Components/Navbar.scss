@@ -29,6 +29,7 @@
     .navbar__cta,
     .navbar__hamburger {
       opacity: var(--daksha-progress, 0);
+      transition: opacity 0.45s $ease-quart-out;
     }
   }
 
@@ -78,7 +79,21 @@
   &--landing &__logo-img {
     opacity: 0;
   }
+}
 
+// When info panel is active on landing page — show the navbar logo
+html[data-landing-view="info"] .navbar--landing {
+  .navbar__logo {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .navbar__logo-img {
+    opacity: 1;
+  }
+}
+
+.navbar {
   @media (prefers-reduced-motion: reduce) {
     &--landing &__logo-img {
       opacity: 1;

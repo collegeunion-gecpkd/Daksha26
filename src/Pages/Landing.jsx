@@ -4,15 +4,12 @@ import DakshaTitle from "../assets/dakshafont.png";
 import HeroBG   from "../assets/dakshaBG.jpg";
 import PanBG    from "../assets/bg2.png";
 
-function easeOutCubic(t) {
-  return 1 - (1 - t) ** 3;
-}
+const SNAP_MS = 720;
 
 function Landing() {
   const [isRevealed, setIsRevealed] = useState(false);
   const rootRef = useRef(null);
-  const titleRef = useRef(null);
-  const homeRect = useRef(null);
+  const pinRef = useRef(null);
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
@@ -24,146 +21,155 @@ function Landing() {
 
   useEffect(() => {
     const root = rootRef.current;
-    const title = titleRef.current;
-    if (!root || !title) return;
+    const pin = pinRef.current;
+    if (!root) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const doc = document.documentElement;
+    const shift = root.querySelector(".bg-shift");
+
+    if (reduceMotion) {
+      doc.style.setProperty("--daksha-progress", "1");
+      return () => doc.style.removeProperty("--daksha-progress");
+    }
+
     doc.setAttribute("data-landing-scroll", "");
+    doc.dataset.landingView = "hero";
+    doc.style.setProperty("--daksha-progress", "0");
 
-    const cacheHome = () => {
-      const prev = title.style.transform;
-      title.style.transform = "none";
-      homeRect.current = title.getBoundingClientRect();
-      title.style.transform = prev;
+    let atInfo = false;
+    let snapping = false;
+    let touchY = null;
+    let snapTimer = 0;
+
+    const endSnap = () => {
+      snapping = false;
+      root.classList.remove("is-snapping");
     };
 
-    let frame = 0;
-    const apply = () => {
-      frame = 0;
-      const progress = Math.max(0, Math.min(1, window.scrollY / window.innerHeight));
-      root.style.setProperty("--progress", String(progress));
-      doc.style.setProperty("--daksha-progress", String(progress));
-      root.classList.toggle("is-info-interactive", progress > 0.4);
-      root.classList.toggle("is-panning", progress > 0.02);
+    const setView = (info) => {
+      if (snapping || info === atInfo) return;
+      snapping = true;
+      atInfo = info;
+      root.classList.add("is-snapping");
+      root.classList.toggle("is-info", info);
+      doc.dataset.landingView = info ? "info" : "hero";
+      doc.style.setProperty("--daksha-progress", info ? "1" : "0");
+      window.clearTimeout(snapTimer);
+      snapTimer = window.setTimeout(endSnap, SNAP_MS + 40);
+    };
 
-      if (reduceMotion) {
-        title.style.transform = "none";
-        return;
+    const onShiftEnd = (e) => {
+      if (e.target !== shift || e.propertyName !== "transform") return;
+      window.clearTimeout(snapTimer);
+      endSnap();
+    };
+
+    const onWheel = (e) => {
+      e.preventDefault();
+      if (e.deltaY > 0) setView(true);
+      else if (e.deltaY < 0) setView(false);
+    };
+
+    const onTouchStart = (e) => {
+      touchY = e.touches[0].clientY;
+    };
+
+    const onTouchMove = (e) => {
+      if (touchY == null) return;
+      if (Math.abs(touchY - e.touches[0].clientY) > 16 && e.cancelable) {
+        e.preventDefault();
       }
-
-      if (progress === 0 || !homeRect.current) cacheHome();
-      const home = homeRect.current;
-      const logo = document.getElementById("daksha-nav-logo");
-      if (!home || !logo || home.width < 8) return;
-
-      const dest = logo.getBoundingClientRect();
-      if (dest.width < 8) return;
-
-      const p = easeOutCubic(progress);
-      const scale = dest.height / home.height;
-      const tx = dest.left - home.left;
-      const ty = dest.top - home.top;
-      title.style.transform = `translate3d(${tx * p}px, ${ty * p}px, 0) scale(${1 + (scale - 1) * p})`;
     };
 
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(apply);
+    const onTouchEnd = (e) => {
+      if (touchY == null) return;
+      const dy = touchY - e.changedTouches[0].clientY;
+      touchY = null;
+      if (dy > 20) setView(true);
+      else if (dy < -20) setView(false);
     };
 
-    const onResize = () => {
-      cacheHome();
-      onScroll();
+    const onPinClick = (e) => {
+      if (atInfo) return;
+      if (e.target.closest("a, button, .dates-row, .section-info")) return;
+      setView(true);
     };
 
-    cacheHome();
-    apply();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
+    shift?.addEventListener("transitionend", onShiftEnd);
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    pin?.addEventListener("click", onPinClick);
     return () => {
-      if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
+      window.clearTimeout(snapTimer);
+      shift?.removeEventListener("transitionend", onShiftEnd);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      pin?.removeEventListener("click", onPinClick);
       doc.style.removeProperty("--daksha-progress");
       doc.removeAttribute("data-landing-scroll");
-      title.style.transform = "none";
+      doc.removeAttribute("data-landing-view");
     };
   }, [isRevealed]);
 
   return (
     <main className={`landing ${isRevealed ? "landing--revealed" : ""}`}>
       <div className="landing-scroll-root" ref={rootRef}>
-        <div className="bg-pin">
+        <div className="bg-pin" ref={pinRef}>
 
-          {/*
-           * ── Horizontal canvas: [dakshaBG | bg2] side-by-side ──
-           * .bg-shift is 200vw wide and pans LEFT as --progress rises,
-           * creating a vertical-scroll → horizontal-travel effect.
-           */}
           <div className="bg-shift">
             <img src={HeroBG} alt="" className="bg-img bg-img--hero" fetchPriority="high" />
-            <img src={PanBG}  alt="" className="bg-img bg-img--pan" />
+            <img src={PanBG}  alt="" className="bg-img bg-img--pan" decoding="async" />
           </div>
 
-          {/* ── Gradient overlays ── */}
           <div className="bg-overlay bg-overlay--left" />
           <div className="bg-overlay bg-overlay--right" />
           <div className="bg-overlay bg-overlay--top" />
+          <div className="bg-pan-fade" aria-hidden="true" />
 
-          {/* ── Noise grain texture ── */}
-          <div className="bg-grain" aria-hidden="true" />
-
-          {/* ── HERO SECTION ── */}
           <section className="section-hero" aria-label="Daksha'26">
             <div className="hero-layer">
-
-              {/* College name — top left */}
               <div className="corner-text top-left anim-fade-in-down">
                 <p>ഗവ. എഞ്ചിനീയറിംഗ് കോളേജ്</p>
                 <p>പാലക്കാട്</p>
               </div>
 
-              {/* Dates — bottom left */}
               <div className="bottom-left-dates anim-fade-in-up">
                 <div className="dates-row">
-                  <span>22</span>
-                  <span>23</span>
-                  <span>24</span>
+                  <span tabIndex={0}>22</span>
+                  <span tabIndex={0}>23</span>
+                  <span tabIndex={0}>24</span>
                 </div>
                 <div className="month-row">
                   <span className="red-text">S E P</span> T E M B E R
                 </div>
               </div>
 
-              {/* College union — bottom right */}
               <div className="corner-text bottom-right anim-fade-in-right">
                 <span className="red-text">SECULAR</span> COLLEGE UNION
               </div>
 
-              {/* Scroll hint */}
               <div className="scroll-hint anim-fade-in-up">
                 <div className="scroll-hint__line" />
               </div>
 
-              {/* Decorative vertical rule */}
               <div className="hero-vline anim-vline" aria-hidden="true" />
             </div>
           </section>
 
-          {/* ── TITLE FLY ── */}
           <div className="left-title anim-reveal-left">
-            <div className="title-fly" ref={titleRef}>
+            <div className="title-fly">
               <img src={DakshaTitle} alt="Daksha'26" className="title-png" />
             </div>
             <p className="title-tagline anim-fade-in-up-delayed">Annual Arts &amp; Cultural Fest</p>
           </div>
 
-          {/* ── INFO SECTION ── */}
           <section className="section-info" id="info" aria-label="About Daksha'26">
             <div className="info-panel">
-
-              {/* Red accent bar */}
               <div className="info-accent-bar" />
 
               <div className="info-desc">

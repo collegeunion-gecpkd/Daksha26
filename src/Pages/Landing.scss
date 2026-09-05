@@ -1,14 +1,17 @@
 @use '../styles/variables' as *;
 @use '../styles/animations';
 
+$snap-ms: 0.72s;
+$snap-ease: $ease-expo-out;
+
+@keyframes snapVeil {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 0.22; }
+}
+
 // ============================================================
 // DAKSHA '26 — Landing Page
-//
-// Scroll Architecture:
-//   .landing-scroll-root  — 200vh; --progress 0→1 over 1vh of scroll
-//   .bg-pin               — sticky 100vh stage (image + hero + info)
-//   .bg-shift             — pans the photograph; bg2 is flipped (scaleX(-1))
-//                           so face appears on right, dark canvas on left
+// CSS class .is-info drives the hero → info snap (compositor only).
 // ============================================================
 
 .landing {
@@ -25,51 +28,51 @@
     .anim-reveal-left         { opacity: 1; transform: translateX(0) translateY(-50%); }
     .anim-fade-in-up          { opacity: 1; transform: translateY(0); }
     .anim-fade-in-right       { opacity: 1; transform: translateX(0); }
-    .anim-fade-in-up-delayed  { opacity: 1; transform: translateY(0); }
+    .anim-fade-in-up-delayed:not(.title-tagline)  { opacity: 1; transform: translateY(0); }
     .anim-vline               { transform: scaleY(1); opacity: 0.18; }
 
     .scroll-hint.anim-fade-in-up {
-      opacity: calc(1 - min(1, var(--progress, 0) * 4));
+      opacity: 1;
       transform: translateX(-50%);
     }
   }
 }
 
-// ── Scroll root ───────────────────────────────────────────────
-.landing-scroll-root {
-  position: relative;
-  height: 200vh;
-  --progress: 0;
-  // Pan the 200vw canvas exactly one viewport width to the left.
-  // At progress=0 → dakshaBG fills the screen.
-  // At progress=1 → bg2 fills the screen.
-  --pan-distance: 100vw;
+.is-info .scroll-hint.anim-fade-in-up {
+  opacity: 0;
 }
 
 // ── Stage ─────────────────────────────────────────────────────
+.landing-scroll-root {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: none;
+}
+
 .bg-pin {
-  position: sticky;
-  top: 0;
+  position: relative;
   height: 100vh;
   overflow: hidden;
   background-color: $color-black;
+  contain: layout paint;
+  isolation: isolate;
 }
 
-// ── Background canvas — 200vw horizontal strip ────────────────
-// [  dakshaBG (0–100vw)  |  bg2 (100–200vw)  ]
-// Pans left by 100vw as --progress goes 0→1.
 .bg-shift {
   position: absolute;
   top: 0;
   left: 0;
-  width: 200vw;          // two viewports wide
+  width: 200vw;
   height: 100%;
   z-index: $z-hero-image;
-  will-change: transform;
-  transform: translate3d(
-    calc(var(--progress, 0) * -100vw),
-    0, 0
-  );
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  transition: transform $snap-ms $snap-ease;
+}
+
+.is-info .bg-shift {
+  transform: translate3d(-50%, 0, 0);
 }
 
 // Shared image base
@@ -79,20 +82,17 @@
   height: 100%;
   width: 100vw;          // each panel = one viewport wide
   object-fit: cover;
+  backface-visibility: hidden;
 
   // Left panel — dakshaBG.jpg: face on right, dark left canvas
   &--hero {
     left: 0;
     object-position: 82% center;
-    animation: kenBurns 28s $ease-expo-out forwards;
   }
 
-  // Right panel — bg2.png: face on left, dark space on right
-  // Placed exactly at 100vw so it appears as the user pans right
   &--pan {
     left: 100vw;
-    object-position: 20% center; // show face (left side of bg2)
-    animation: kenBurns 28s $ease-expo-out forwards 0.5s;
+    object-position: 20% center;
   }
 }
 
@@ -113,7 +113,8 @@
       rgba(0, 0, 0, 0.00) 100%
     );
     // At progress=0: full strength. Stays mostly until bg2 takes over.
-    opacity: calc(1 - var(--progress, 0) * 0.55);
+    opacity: 1;
+    transition: opacity $snap-ms $snap-ease;
   }
 
   // Right vignette — grows as bg2 comes in; gives info panel a dark canvas
@@ -125,7 +126,8 @@
       rgba(0, 0, 0, 0.25) 60%,
       rgba(0, 0, 0, 0.00) 100%
     );
-    opacity: calc(var(--progress, 0) * 1.2);
+    opacity: 0;
+    transition: opacity $snap-ms $snap-ease;
   }
 
   // Top vignette — always present to keep navbar legible
@@ -140,16 +142,28 @@
   }
 }
 
-// ── Film grain ────────────────────────────────────────────────
-.bg-grain {
+.is-info .bg-overlay--left  { opacity: 0.45; }
+.is-info .bg-overlay--right { opacity: 1; }
+
+.bg-pan-fade {
   position: absolute;
   inset: 0;
   z-index: $z-hero-vignette;
   pointer-events: none;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
+  background: #000;
+  opacity: 0;
+}
+
+.is-snapping .bg-pan-fade {
+  animation: snapVeil $snap-ms ease-in-out;
+}
+
+.is-snapping .bg-shift {
+  will-change: transform;
+}
+
+html[data-landing-scroll] {
+  overflow: hidden;
 }
 
 // ── Sections ──────────────────────────────────────────────────
@@ -162,24 +176,31 @@
   overflow: hidden;
 }
 
-// Hero layer: fades + drifts left during scroll
 .hero-layer {
   position: absolute;
   inset: 0;
-  opacity: calc(1 - var(--progress, 0) * 1.4);
-  transform: translate3d(calc(var(--progress, 0) * -40px), 0, 0);
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
   pointer-events: none;
+  transition: opacity 0.45s $snap-ease, transform $snap-ms $snap-ease;
 }
 
-// Info section: fades in + slides from right
+.is-info .hero-layer {
+  opacity: 0;
+  transform: translate3d(-16px, 0, 0);
+}
+
 .section-info {
   z-index: $z-hero-scroll;
-  opacity: var(--progress, 0);
-  transform: translate3d(calc((1 - var(--progress, 0)) * 48px), 0, 0);
+  opacity: 0;
+  transform: translate3d(20px, 0, 0);
   pointer-events: none;
+  transition: opacity $snap-ms $snap-ease, transform $snap-ms $snap-ease;
 }
 
-.is-info-interactive .section-info {
+.is-info .section-info {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
   pointer-events: auto;
 }
 
@@ -246,21 +267,24 @@
 
   .title-fly {
     transform-origin: top left;
-    will-change: transform;
   }
 
   .title-png {
     width: 100%;
     height: auto;
     display: block;
-    filter: drop-shadow(0 4px 40px rgba(0, 0, 0, 0.6));
     user-select: none;
     -webkit-user-drag: none;
-    animation: parallaxFloat 7s ease-in-out infinite 2.5s;
   }
 }
 
-// Tagline line below title logo
+.landing--revealed .is-info .left-title {
+  opacity: 0;
+  transform: translateX(0) translateY(-50%);
+  transition: opacity 0.35s $snap-ease;
+  pointer-events: none;
+}
+
 .title-tagline {
   margin: 0.85rem 0 0;
   font-size: 0.6rem;
@@ -272,8 +296,20 @@
   transition: opacity 1s $ease-expo-out 1.2s, transform 1s $ease-expo-out 1.2s;
 }
 
-.is-panning .left-title .title-png {
-  animation: none;
+.landing--revealed .title-tagline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.is-info .title-tagline {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.is-info .bottom-left-dates,
+.is-snapping .bottom-left-dates {
+  pointer-events: none;
 }
 
 // ── Dates — bottom left ───────────────────────────────────────
@@ -284,6 +320,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  pointer-events: auto;
+  z-index: 2;
 
   .dates-row {
     display: flex;
@@ -297,6 +335,20 @@
       line-height: 1;
       padding-bottom: 4px;
       border-bottom: 2px solid $color-red;
+      cursor: default;
+      transform-origin: bottom center;
+      transition:
+        color 0.2s $ease-quart-out,
+        transform 0.2s $snap-ease,
+        border-color 0.2s $ease-quart-out;
+
+      &:hover,
+      &:focus-visible {
+        color: $color-red;
+        transform: translateY(-3px) scale(1.06);
+        border-bottom-color: $color-white;
+        outline: none;
+      }
     }
   }
 
@@ -317,7 +369,6 @@
   left: 50%;
   transform: translateX(-50%);
   pointer-events: none;
-  opacity: calc(1 - min(1, var(--progress, 0) * 4));
 
   &__line {
     width: 1px;
@@ -341,33 +392,20 @@
 
 // Red accent bar animates in as progress rises
 .info-accent-bar {
-  width: calc(var(--progress, 0) * 48px);
+  width: 0;
   height: 2px;
   background: $color-red;
   max-width: 48px;
   border-radius: 1px;
+  transition: width 0.5s $snap-ease 0.12s;
 }
 
-// Info desc — each line staggers via --progress
+.is-info .info-accent-bar { width: 48px; }
+
 .info-desc {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
-
-  .info-tagline {
-    transform: translateY(calc((1 - var(--progress, 0)) * 18px));
-    opacity: calc(var(--progress, 0) * 1.2);
-  }
-
-  .info-college {
-    transform: translateY(calc((1 - var(--progress, 0)) * 24px));
-    opacity: calc(var(--progress, 0) * 1.4);
-  }
-
-  .info-body {
-    transform: translateY(calc((1 - var(--progress, 0)) * 28px));
-    opacity: calc(var(--progress, 0) * 0.8);
-  }
 }
 
 .info-tagline {
@@ -411,14 +449,13 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   text-decoration: none;
   color: $color-gray-500;
-  // Stagger entry: each link's --link-delay (0,1,2) shifts its timing
-  transform: translateX(
-    calc((1 - var(--progress, 0)) * (14px + calc(var(--link-delay, 0) * 6px)))
-  );
-  opacity: calc(max(0, var(--progress, 0) - var(--link-delay, 0) * 0.08) * 1.5);
+  opacity: 0;
+  transform: translateX(10px);
   transition:
-    color        0.3s $ease-quart-out,
-    padding-left 0.3s $ease-expo-out;
+    color        0.25s $ease-quart-out,
+    padding-left 0.25s $ease-expo-out,
+    opacity      0.28s $snap-ease,
+    transform    0.28s $snap-ease;
 
   &:hover,
   &:focus-visible {
@@ -454,15 +491,27 @@
   }
 }
 
+.is-info .info-link {
+  opacity: 1;
+  transform: none;
+  transition:
+    color        0.25s $ease-quart-out,
+    padding-left 0.25s $ease-expo-out,
+    opacity      0.4s $snap-ease calc(0.1s + var(--link-delay, 0) * 0.06s),
+    transform    0.4s $snap-ease calc(0.1s + var(--link-delay, 0) * 0.06s);
+}
+
 .info-footer {
   font-size: 0.65rem;
   letter-spacing: 0.4em;
   color: $color-gray-400;
   text-transform: uppercase;
-  opacity: calc(var(--progress, 0) * 1.4);
-  transform: translateY(calc((1 - var(--progress, 0)) * 16px));
+  opacity: 0;
+  transition: opacity 0.45s $snap-ease 0.2s;
   .red-text { color: $color-red; }
 }
+
+.is-info .info-footer { opacity: 1; }
 
 // ── Entrance keyframe triggers ────────────────────────────────
 .anim-fade-in-down {
@@ -502,9 +551,6 @@
 
 // ── Responsive — mobile ───────────────────────────────────────
 @media screen and (max-width: #{$bp-md}) {
-  // On mobile the two panels are still 100vw each; pan stays one viewport
-  .landing-scroll-root { --pan-distance: 100vw; }
-
   .corner-text { font-size: 0.55rem; }
 
   .left-title {
@@ -520,6 +566,7 @@
   .hero-vline    { display: none; }
 
   .section-info  { transform: none; }
+  .is-info .section-info { transform: none; }
 
   .info-panel {
     position: absolute;
@@ -556,7 +603,8 @@
 @media (prefers-reduced-motion: reduce) {
   .landing-scroll-root {
     height: auto;
-    --pan-distance: 0px;
+    overflow: visible;
+    touch-action: auto;
   }
 
   .bg-pin {
@@ -568,9 +616,11 @@
   // Collapse the 200vw canvas — only show the hero image
   .bg-shift {
     width: 100vw;
-    transform: none;
+    transform: none !important;
     will-change: auto;
   }
+
+  .bg-pan-fade { display: none; }
 
   .bg-img--pan  { display: none; }
   .bg-img--hero { animation: none; }
