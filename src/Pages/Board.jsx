@@ -11,12 +11,13 @@ function Board() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Compute display time from the lastUpdatedTime state value —
-  // avoids the stale closure bug of reading state inside a callback
+  // Compute display time only when a valid timestamp exists
   const getLastUpdatedTime = useCallback(() => {
-    setMins((prev) =>
-      Math.floor(Math.abs(new Date() - lastUpdatedTime) / 60000)
-    );
+    if (!lastUpdatedTime) {
+      setMins(null);
+      return;
+    }
+    setMins(Math.floor(Math.abs(new Date() - lastUpdatedTime) / 60000));
   }, [lastUpdatedTime]);
 
   function ordinal_suffix_of(i) {
@@ -40,17 +41,42 @@ function Board() {
     fetch(
       "https://script.google.com/macros/s/AKfycbyGujyOWsqlnFyJGPzIvICGVBLW1yqp99YDkTsb_7a2575PG--75PYZdAD00T0ziwyM/exec?type=points"
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error("HTTP error " + response.status);
+        return response.json();
+      })
       .then((data) => {
-        setBoardData(
-          data.data.sort((a, b) => b.Point - a.Point)
-        );
-        setIsLoading(false);
-        setLastUpdatedTime(new Date()); // triggers getLastUpdatedTime via useEffect below
+        if (data && Array.isArray(data.data) && data.data.length > 0) {
+          setBoardData(data.data.sort((a, b) => b.Point - a.Point));
+          setLastUpdatedTime(new Date());
+          setIsLoading(false);
+        } else {
+          throw new Error("Invalid data format");
+        }
       })
       .catch(() => {
-        setError("Failed to load leaderboard. Please try again.");
-        setIsLoading(false);
+        // Fall back to bundled fallback data so users never see an empty broken table
+        fetch("/boardData.json")
+          .then((res) => res.json())
+          .then((localData) => {
+            if (Array.isArray(localData) && localData.length > 0) {
+              const formatted = localData.map((item) => ({
+                YearName: item.teamName,
+                Year: parseInt(item.year, 10) || 1,
+                Point: item.point || 0,
+              }));
+              setBoardData(formatted.sort((a, b) => b.Point - a.Point));
+              setError(null);
+            } else {
+              setError("Failed to load leaderboard. Please try again.");
+            }
+          })
+          .catch(() => {
+            setError("Failed to load leaderboard. Please try again.");
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
       });
   }, []);
 
@@ -77,7 +103,7 @@ function Board() {
     <div className="board--box">
       <div className="title--box">
         <h1>Leader Board</h1>
-        <span>Updated {mins !== null ? `${mins} minute(s) ago` : "just now"}</span>
+        <span>{mins !== null ? `Updated ${mins} minute(s) ago` : "Standings"}</span>
       </div>
       {error && (
         <p role="alert" style={{ textAlign: "center", color: "rgba(255,100,100,0.9)", padding: "2rem" }}>
@@ -90,8 +116,8 @@ function Board() {
         <table>
           <thead>
             <tr>
-              {columns.map((title, index) => (
-                <th key={index}>{title}</th>
+              {columns.map((title) => (
+                <th key={title}>{title}</th>
               ))}
             </tr>
           </thead>

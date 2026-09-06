@@ -15,14 +15,36 @@ function Events() {
     fetch(
       "https://script.google.com/macros/s/AKfycbyGujyOWsqlnFyJGPzIvICGVBLW1yqp99YDkTsb_7a2575PG--75PYZdAD00T0ziwyM/exec?type=events"
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.json();
+      })
       .then((data) => {
-        setEventData(data.data);
+        if (data && Array.isArray(data.data)) {
+          setEventData(data.data);
+        } else {
+          setEventData([]);
+        }
         setIsLoading(false);
       })
       .catch(() => {
-        setError("Failed to load events. Please check your connection and try again.");
-        setIsLoading(false);
+        // Fall back to bundled events data
+        fetch("/eventsData.json")
+          .then((res) => res.json())
+          .then((fallbackData) => {
+            if (Array.isArray(fallbackData) && fallbackData.length > 0) {
+              setEventData(fallbackData);
+              setError(null);
+            } else {
+              setError("Failed to load events. Please check your connection and try again.");
+            }
+          })
+          .catch(() => {
+            setError("Failed to load events. Please check your connection and try again.");
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
       });
   }, []);
 
@@ -30,16 +52,23 @@ function Events() {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
-  const filteredEvents = eventData.filter(
-    (event) =>
-      event.EventName.toLowerCase().includes(searchTerm) ||
-      event.Winner1.toLowerCase().includes(searchTerm) ||
-      event.Winner2.toLowerCase().includes(searchTerm) ||
-      event.Winner3.toLowerCase().includes(searchTerm) ||
-      event.EventDate.toLowerCase().includes(searchTerm) ||
-      event.EventStage.toLowerCase().includes(searchTerm) ||
-      event.EventState.toLowerCase().includes(searchTerm)
-  );
+  const filteredEvents = Array.isArray(eventData)
+    ? eventData.filter((event) => {
+        if (!event) return false;
+        const term = searchTerm.trim().toLowerCase();
+        if (!term) return true;
+        const matches = (val) => val != null && String(val).toLowerCase().includes(term);
+        return (
+          matches(event.EventName) ||
+          matches(event.Winner1) ||
+          matches(event.Winner2) ||
+          matches(event.Winner3) ||
+          matches(event.EventDate) ||
+          matches(event.EventStage) ||
+          matches(event.EventState)
+        );
+      })
+    : [];
 
   return (
     <>
@@ -65,39 +94,45 @@ function Events() {
         <Spinner />
       ) : (
         <div className="event_box">
-          {filteredEvents.map((row) => (
-            <div className="event_card" key={row.EventName}>
-              <div className="mele">
-                <span className="eventDate"> {row.EventDate}</span>
-                <span className="eventState" data-state={row.EventState}>
-                  {row.EventState}
+          {filteredEvents.length === 0 ? (
+            <p style={{ textAlign: "center", color: "rgba(255, 255, 255, 0.6)", padding: "3rem 1rem", width: "100%", fontSize: "1rem" }}>
+              {searchTerm ? `No events found matching "${searchTerm}"` : "No events available at this time."}
+            </p>
+          ) : (
+            filteredEvents.map((row) => (
+              <div className="event_card" key={row.EventName}>
+                <div className="mele">
+                  <span className="eventDate"> {row.EventDate}</span>
+                  <span className="eventState" data-state={row.EventState}>
+                    {row.EventState}
+                  </span>
+                </div>
+                <hr />
+                <span className="eventName">{row.EventName}</span>
+                <span className="eventStage" data-state={row.EventStage}>
+                  Stage: {row.EventStage}
+                </span>
+                {row.EventState == "Result Announced" ? (
+                  <span className="eventStartTime" data-state={row.EventStart}>
+                    Event Started At {row.EventStart}
+                  </span>
+                ) : (
+                  <span className="eventStartTime" data-state={row.EventStart}>
+                    Event Starts At {row.EventStart}
+                  </span>
+                )}
+                <span className="FirstWinner Winner" data-state={row.Winner1}>
+                  First : {row.Winner1}
+                </span>
+                <span className="SecondWinner Winner" data-state={row.Winner2}>
+                  Second : {row.Winner2}
+                </span>
+                <span className="ThirdWinner Winner" data-state={row.Winner3}>
+                  Third : {row.Winner3}
                 </span>
               </div>
-              <hr />
-              <span className="eventName">{row.EventName}</span>
-              <span className="eventStage" data-state={row.EventStage}>
-                Stage: {row.EventStage}
-              </span>
-              {row.EventState == "Result Announced" ? (
-                <span className="eventStartTime" data-state={row.EventStart}>
-                  Event Started At {row.EventStart}
-                </span>
-              ) : (
-                <span className="eventStartTime" data-state={row.EventStart}>
-                  Event Starts At {row.EventStart}
-                </span>
-              )}
-              <span className="FirstWinner Winner" data-state={row.Winner1}>
-                First : {row.Winner1}
-              </span>
-              <span className="SecondWinner Winner" data-state={row.Winner2}>
-                Second : {row.Winner2}
-              </span>
-              <span className="ThirdWinner Winner" data-state={row.Winner3}>
-                Third : {row.Winner3}
-              </span>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       )}
     </>

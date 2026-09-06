@@ -189,16 +189,18 @@ html[data-landing-view="info"] .navbar--landing {
     width: 40px;
     height: 40px;
     padding: 0;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
     cursor: pointer;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 6px;
-    transition: border-color 0.2s $ease-quart-out;
+    transition: border-color 0.2s $ease-quart-out, background-color 0.2s $ease-quart-out;
     -webkit-tap-highlight-color: transparent;
 
     &:hover,
@@ -331,6 +333,13 @@ html[data-landing-view="info"] .navbar--landing {
 
     &__hamburger {
       display: inline-flex;
+    }
+
+    &--landing {
+      .navbar__hamburger {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
     }
 
     &__logo {

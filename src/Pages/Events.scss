@@ -8,19 +8,18 @@
   }
   .Search{
     display: block;
-    margin: auto;
+    margin: 1rem auto 0;
     padding: .6rem .8rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.237);
-    color: white !important;;
-    border-radius: .3rem;
-    width: 18rem;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white !important;
+    border-radius: .4rem;
+    width: min(calc(100vw - 48px), 20rem);
+    box-sizing: border-box;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    margin: auto;
-    margin-top: 1rem;
 
     &::placeholder{
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.6);
     }
   }
 }
@@ -29,25 +28,29 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 4.5rem;
-  width: 100vw;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  width: 100%;
   max-width: 1400px;
-  padding: 0 24px;
+  padding: 0 clamp(16px, 4vw, 32px);
   margin: auto;
+  box-sizing: border-box;
   padding-bottom: 64px;
 
   .event_card {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
-    width: calc(100vw - 48px);
-    min-width: 350px;
-    max-width: 400px;
-    height: 300px;
-    background: rgba(255, 255, 255, 0.237);
-    border: 1px solid rgba(255, 255, 255, 0.237);
+    padding: 1.25rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 380px;
+    height: auto;
+    min-height: 280px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 1rem;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 
     span[data-state="Result Announced"] {
       color: greenyellow;

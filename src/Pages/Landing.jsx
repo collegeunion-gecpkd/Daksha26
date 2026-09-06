@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+/* eslint-disable react/no-unknown-property */
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Landing.scss";
 import DakshaTitle from "../assets/dakshafont.png";
 import HeroBG   from "../assets/dakshaBG.jpg";
-import PanBG    from "../assets/bg2.png";
+import PanBG    from "../assets/bg2.jpg";
 
 const SNAP_MS = 720;
 
@@ -12,11 +14,7 @@ function Landing() {
   const pinRef = useRef(null);
 
   useEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      const t = setTimeout(() => setIsRevealed(true), 50);
-      return () => clearTimeout(t);
-    });
-    return () => cancelAnimationFrame(raf);
+    setIsRevealed(true);
   }, []);
 
   useEffect(() => {
@@ -72,13 +70,21 @@ function Landing() {
     };
 
     const onTouchStart = (e) => {
+      const insideInfo = e.target.closest(".info-panel");
+      if (insideInfo && insideInfo.scrollHeight > insideInfo.clientHeight) {
+        touchY = null;
+        return;
+      }
       touchY = e.touches[0].clientY;
     };
 
     const onTouchMove = (e) => {
       if (touchY == null) return;
       if (Math.abs(touchY - e.touches[0].clientY) > 16 && e.cancelable) {
-        e.preventDefault();
+        // Prevent accidental browser pull-to-refresh on the hero screen
+        if (!atInfo) {
+          e.preventDefault();
+        }
       }
     };
 
@@ -86,8 +92,8 @@ function Landing() {
       if (touchY == null) return;
       const dy = touchY - e.changedTouches[0].clientY;
       touchY = null;
-      if (dy > 20) setView(true);
-      else if (dy < -20) setView(false);
+      if (dy > 28) setView(true);
+      else if (dy < -28) setView(false);
     };
 
     const onPinClick = (e) => {
@@ -123,7 +129,7 @@ function Landing() {
 
           <div className="bg-shift">
             <img src={HeroBG} alt="" className="bg-img bg-img--hero" fetchPriority="high" />
-            <img src={PanBG}  alt="" className="bg-img bg-img--pan" decoding="async" />
+            <img src={PanBG}  alt="" className="bg-img bg-img--pan" loading="lazy" decoding="async" />
           </div>
 
           <div className="bg-overlay bg-overlay--left" />
@@ -194,17 +200,17 @@ function Landing() {
                   <span className="info-link__arrow">→</span>
                 </a>
 
-                <a href="/events" className="info-link" style={{ "--link-delay": "1" }}>
+                <Link to="/events" className="info-link" style={{ "--link-delay": "1" }}>
                   <span className="info-link__number">02</span>
                   <span className="info-link__label">Events</span>
                   <span className="info-link__arrow">→</span>
-                </a>
+                </Link>
 
-                <a href="/board" className="info-link" style={{ "--link-delay": "2" }}>
+                <Link to="/board" className="info-link" style={{ "--link-delay": "2" }}>
                   <span className="info-link__number">03</span>
                   <span className="info-link__label">Leader Board</span>
                   <span className="info-link__arrow">→</span>
-                </a>
+                </Link>
               </nav>
 
               <div className="info-footer">

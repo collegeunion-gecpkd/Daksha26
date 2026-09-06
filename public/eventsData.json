@@ -1,0 +1,92 @@
+[
+  {
+    "EventName": "Bharatanatyam",
+    "EventDate": "Day 1 - Sep 22",
+    "EventStage": "Stage 1 (Auditorium)",
+    "EventState": "Scheduled",
+    "EventStart": "09:30 AM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Mohiniyattam",
+    "EventDate": "Day 1 - Sep 22",
+    "EventStage": "Stage 1 (Auditorium)",
+    "EventState": "Scheduled",
+    "EventStart": "11:30 AM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Classical Music (Solo)",
+    "EventDate": "Day 1 - Sep 22",
+    "EventStage": "Stage 2 (Seminar Hall)",
+    "EventState": "Scheduled",
+    "EventStart": "10:00 AM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Western Vocal (Solo)",
+    "EventDate": "Day 2 - Sep 23",
+    "EventStage": "Stage 1 (Auditorium)",
+    "EventState": "Scheduled",
+    "EventStart": "10:00 AM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Mime",
+    "EventDate": "Day 2 - Sep 23",
+    "EventStage": "Main Stage",
+    "EventState": "Scheduled",
+    "EventStart": "01:30 PM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Nadanpattu",
+    "EventDate": "Day 2 - Sep 23",
+    "EventStage": "Main Stage",
+    "EventState": "Scheduled",
+    "EventStart": "03:30 PM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Theme Dance",
+    "EventDate": "Day 3 - Sep 24",
+    "EventStage": "Main Stage",
+    "EventState": "Scheduled",
+    "EventStart": "11:00 AM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Skit",
+    "EventDate": "Day 3 - Sep 24",
+    "EventStage": "Stage 1 (Auditorium)",
+    "EventState": "Scheduled",
+    "EventStart": "02:00 PM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Synchronized Group Dance",
+    "EventDate": "Day 3 - Sep 24",
+    "EventStage": "Main Stage",
+    "EventState": "Scheduled",
+    "EventStart": "04:30 PM",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  }
+]

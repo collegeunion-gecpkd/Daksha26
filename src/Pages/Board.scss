@@ -1,16 +1,21 @@
 .board--box {
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: white;
   font-size: 1.2rem;
-  height: 82vh;
+  min-height: 80vh;
+  min-height: 80dvh;
+  height: auto;
+  padding: 0 clamp(16px, 4vw, 32px) 48px;
 }
 
 .title--box {
   margin-top: 2rem;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
   h1,
   span {
     display: block;
@@ -42,15 +47,16 @@
 table {
   border-collapse: collapse;
   max-width: 600px;
-  min-width: 350px;
-  width: calc(100vw - 48px);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   thead {
     border: 1px solid rgba(255, 255, 255, 0.237);
     border-bottom: none;
   }
   td,
   th {
-    padding: 0.8rem 1.5rem;
+    padding: clamp(0.6rem, 2vw, 0.8rem) clamp(0.75rem, 3vw, 1.5rem);
     border-right: 1px solid rgba(255, 255, 255, 0.237);
 
     &:first-child {

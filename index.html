@@ -48,13 +48,27 @@
   <!-- Service Worker registration -->
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('worker.js').then(function (registration) {
-          console.log('SW registered', registration.scope);
-        }, function (err) {
-          console.warn('SW registration failed', err);
+      var isDev = ['localhost', '127.0.0.1', ''].indexOf(window.location.hostname) !== -1 ||
+        window.location.hostname.indexOf('192.168.') === 0 ||
+        window.location.hostname.indexOf('10.') === 0 ||
+        Boolean(window.location.port);
+
+      if (isDev) {
+        // Clear any old/stale worker registrations while developing
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (var i = 0; i < registrations.length; i++) {
+            registrations[i].unregister();
+          }
         });
-      });
+      } else {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/worker.js').then(function (registration) {
+            console.log('SW registered', registration.scope);
+          }, function (err) {
+            console.warn('SW registration failed', err);
+          });
+        });
+      }
     }
   </script>
 </body>

@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react-refresh/only-export-components */
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -25,7 +25,8 @@ function App() {
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const container = document.getElementById("root");
+const root = container._reactRoot || (container._reactRoot = ReactDOM.createRoot(container));
 root.render(
   <ErrorBoundary>
     <App />
