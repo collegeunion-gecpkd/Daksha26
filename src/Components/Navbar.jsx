@@ -8,6 +8,7 @@ import DakshaLogo from "../assets/dakshafont.png";
 const NAV_LINKS = [
   { label: "Home",         to: "/" },
   { label: "Events",       to: "/events" },
+  { label: "Guidelines",   to: "/guidelines" },
   { label: "Leader Board", to: "/board" },
 ];
 

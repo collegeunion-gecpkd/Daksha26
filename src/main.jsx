@@ -9,6 +9,7 @@ import Landing from "./Pages/Landing";
 import Board from "./Pages/Board";
 import NoPage from "./Pages/NoPage";
 import Events from "./Pages/Events";
+import Guidelines from "./Pages/Guidelines";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<Landing />} />
           <Route path="/board" element={<Board />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/guidelines" element={<Guidelines />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

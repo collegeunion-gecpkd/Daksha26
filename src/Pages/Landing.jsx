@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Landing.scss";
 import DakshaTitle from "../assets/dakshafont.png";
-import HeroBG   from "../assets/dakshaBG.jpg";
-import PanBG    from "../assets/bg2.jpg";
+import HeroBG from "../assets/dakshaBG.jpg";
+import PanBG from "../assets/bg2.jpg";
 
 const SNAP_MS = 720;
 
@@ -129,7 +129,7 @@ function Landing() {
 
           <div className="bg-shift">
             <img src={HeroBG} alt="" className="bg-img bg-img--hero" fetchPriority="high" />
-            <img src={PanBG}  alt="" className="bg-img bg-img--pan" loading="lazy" decoding="async" />
+            <img src={PanBG} alt="" className="bg-img bg-img--pan" loading="lazy" decoding="async" />
           </div>
 
           <div className="bg-overlay bg-overlay--left" />
@@ -144,16 +144,6 @@ function Landing() {
                 <p>പാലക്കാട്</p>
               </div>
 
-              <div className="bottom-left-dates anim-fade-in-up">
-                <div className="dates-row">
-                  <span tabIndex={0}>22</span>
-                  <span tabIndex={0}>23</span>
-                  <span tabIndex={0}>24</span>
-                </div>
-                <div className="month-row">
-                  <span className="red-text">S E P</span> T E M B E R
-                </div>
-              </div>
 
               <div className="corner-text bottom-right anim-fade-in-right">
                 <span className="red-text">SECULAR</span> COLLEGE UNION
@@ -167,11 +157,24 @@ function Landing() {
             </div>
           </section>
 
-          <div className="left-title anim-reveal-left">
-            <div className="title-fly">
-              <img src={DakshaTitle} alt="Daksha'26" className="title-png" />
+          {/* Title block: Daksha logo + tagline + dates (mobile stacks these vertically) */}
+          <div className="hero-title-block">
+            <div className="left-title anim-reveal-left">
+              <div className="title-fly">
+                <img src={DakshaTitle} alt="Daksha'26" className="title-png" />
+              </div>
+              <p className="title-tagline anim-fade-in-up-delayed">Annual Arts &amp; Cultural Fest</p>
             </div>
-            <p className="title-tagline anim-fade-in-up-delayed">Annual Arts &amp; Cultural Fest</p>
+            <div className="bottom-left-dates anim-fade-in-up">
+              <div className="dates-row">
+                <span tabIndex={0}>22</span>
+                <span tabIndex={0}>23</span>
+                <span tabIndex={0}>24</span>
+              </div>
+              <div className="month-row">
+                <span className="red-text">S E P</span> T E M B E R
+              </div>
+            </div>
           </div>
 
           <section className="section-info" id="info" aria-label="About Daksha'26">
@@ -188,17 +191,11 @@ function Landing() {
               </div>
 
               <nav className="info-links" aria-label="Quick links">
-                <a
-                  href="https://drive.google.com/file/d/18av_nSavGaPboWRiNu1ACp-oZCtJ5x4O/view?usp=sharing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="info-link"
-                  style={{ "--link-delay": "0" }}
-                >
+                <Link to="/guidelines" className="info-link" style={{ "--link-delay": "0" }}>
                   <span className="info-link__number">01</span>
                   <span className="info-link__label">Guidelines</span>
                   <span className="info-link__arrow">→</span>
-                </a>
+                </Link>
 
                 <Link to="/events" className="info-link" style={{ "--link-delay": "1" }}>
                   <span className="info-link__number">02</span>

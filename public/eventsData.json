@@ -5,6 +5,8 @@
     "EventStage": "Stage 1 (Auditorium)",
     "EventState": "Scheduled",
     "EventStart": "09:30 AM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -15,6 +17,8 @@
     "EventStage": "Stage 1 (Auditorium)",
     "EventState": "Scheduled",
     "EventStart": "11:30 AM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -25,6 +29,8 @@
     "EventStage": "Stage 2 (Seminar Hall)",
     "EventState": "Scheduled",
     "EventStart": "10:00 AM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -35,6 +41,8 @@
     "EventStage": "Stage 1 (Auditorium)",
     "EventState": "Scheduled",
     "EventStart": "10:00 AM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -45,6 +53,8 @@
     "EventStage": "Main Stage",
     "EventState": "Scheduled",
     "EventStart": "01:30 PM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -55,6 +65,8 @@
     "EventStage": "Main Stage",
     "EventState": "Scheduled",
     "EventStart": "03:30 PM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -65,6 +77,8 @@
     "EventStage": "Main Stage",
     "EventState": "Scheduled",
     "EventStart": "11:00 AM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -75,6 +89,8 @@
     "EventStage": "Stage 1 (Auditorium)",
     "EventState": "Scheduled",
     "EventStart": "02:00 PM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
@@ -85,6 +101,56 @@
     "EventStage": "Main Stage",
     "EventState": "Scheduled",
     "EventStart": "04:30 PM",
+    "EventCategory": "Onstage",
+    "RegistrationLink": "",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Photography",
+    "EventDate": "Day 1 - Sep 22",
+    "EventStage": "Campus",
+    "EventState": "Scheduled",
+    "EventStart": "09:00 AM",
+    "EventCategory": "Offstage",
+    "RegistrationLink": "",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Poetry (Malayalam)",
+    "EventDate": "Day 1 - Sep 22",
+    "EventStage": "Campus",
+    "EventState": "Scheduled",
+    "EventStart": "10:00 AM",
+    "EventCategory": "Offstage",
+    "RegistrationLink": "",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Poster Making",
+    "EventDate": "Day 2 - Sep 23",
+    "EventStage": "Campus",
+    "EventState": "Scheduled",
+    "EventStart": "10:00 AM",
+    "EventCategory": "Offstage",
+    "RegistrationLink": "",
+    "Winner1": "",
+    "Winner2": "",
+    "Winner3": ""
+  },
+  {
+    "EventName": "Short Film",
+    "EventDate": "Day 3 - Sep 24",
+    "EventStage": "Campus",
+    "EventState": "Scheduled",
+    "EventStart": "09:00 AM",
+    "EventCategory": "Offstage",
+    "RegistrationLink": "",
     "Winner1": "",
     "Winner2": "",
     "Winner3": ""
