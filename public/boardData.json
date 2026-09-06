@@ -2,31 +2,31 @@
   {
     "teamName": "Third Year",
     "year": "Third",
-    "point": 120
+    "point": 10
   },
   {
     "teamName": "Fourth Year",
     "year": "Fourth",
-    "point": 105
+    "point": 10
   },
   {
     "teamName": "Second Year",
     "year": "Second",
-    "point": 80
+    "point": 10
   },
   {
     "teamName": "First Year",
     "year": "First",
-    "point": 65
+    "point": 10
   },
   {
     "teamName": "M.Tech 1st Year",
     "year": "MTech First",
-    "point": 35
+    "point": 10
   },
   {
     "teamName": "M.Tech 2nd Year",
     "year": "MTech Second",
-    "point": 25
+    "point": 10
   }
 ]

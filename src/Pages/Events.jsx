@@ -27,6 +27,34 @@ function formatDisplayTime(timeStr) {
   return str;
 }
 
+function getEventDetails(row) {
+  if (!row) return {};
+  const regStatus = String(row.RegistrationStatus || row.RegistrationLink || "").trim();
+  const isOpen = regStatus.toLowerCase() === "open";
+
+  // Check if columns are shifted due to legacy Google Apps Script (where Winner1 contains "Solo" or "Group")
+  const w1Str = String(row.Winner1 || "").trim().toLowerCase();
+  const isShifted = w1Str === "solo" || w1Str === "group";
+
+  const winner1 = isShifted ? (row.Winner1Year || "") : (row.Winner1 || "");
+  const winner1Year = isShifted ? (row.Winner2 || "") : (row.Winner1Year || "");
+  const winner2 = isShifted ? (row.Winner2Year || "") : (row.Winner2 || "");
+  const winner2Year = isShifted ? (row.Winner3 || "") : (row.Winner2Year || "");
+  const winner3 = isShifted ? (row.Winner3Year || "") : (row.Winner3 || "");
+  const winner3Year = isShifted ? "" : (row.Winner3Year || "");
+
+  return {
+    regStatus,
+    isOpen,
+    winner1,
+    winner1Year,
+    winner2,
+    winner2Year,
+    winner3,
+    winner3Year,
+  };
+}
+
 function Events() {
   const [eventData, setEventData] = useState(() => {
     try {
@@ -313,31 +341,38 @@ function Events() {
                   <span className="eventStartTime">Event Starts At {formatDisplayTime(row.EventStart)}</span>
                 )}
 
-                {/* Winners with year */}
-                <span className="FirstWinner Winner" data-state={row.Winner1}>
-                  First: {row.Winner1} {row.Winner1Year ? `(${row.Winner1Year})` : ""}
-                </span>
-                <span className="SecondWinner Winner" data-state={row.Winner2}>
-                  Second: {row.Winner2} {row.Winner2Year ? `(${row.Winner2Year})` : ""}
-                </span>
-                <span className="ThirdWinner Winner" data-state={row.Winner3}>
-                  Third: {row.Winner3} {row.Winner3Year ? `(${row.Winner3Year})` : ""}
-                </span>
+                {/* Winners with year & Register button */}
+                {(() => {
+                  const details = getEventDetails(row);
+                  return (
+                    <>
+                      <span className="FirstWinner Winner" data-state={details.winner1}>
+                        First: {details.winner1} {details.winner1Year ? `(${details.winner1Year})` : ""}
+                      </span>
+                      <span className="SecondWinner Winner" data-state={details.winner2}>
+                        Second: {details.winner2} {details.winner2Year ? `(${details.winner2Year})` : ""}
+                      </span>
+                      <span className="ThirdWinner Winner" data-state={details.winner3}>
+                        Third: {details.winner3} {details.winner3Year ? `(${details.winner3Year})` : ""}
+                      </span>
 
-                {/* In-Site Register Button */}
-                {(row.RegistrationStatus && row.RegistrationStatus.toLowerCase() === "open") ? (
-                  <button
-                    type="button"
-                    onClick={() => openRegistrationModal(row)}
-                    className="event-register-btn"
-                  >
-                    Register
-                  </button>
-                ) : (
-                  <span className="event-register-btn event-register-btn--disabled" aria-disabled="true" style={{textTransform: 'capitalize'}}>
-                    {row.RegistrationStatus || "Registration Opening Soon"}
-                  </span>
-                )}
+                      {/* In-Site Register Button */}
+                      {details.isOpen ? (
+                        <button
+                          type="button"
+                          onClick={() => openRegistrationModal(row)}
+                          className="event-register-btn"
+                        >
+                          Register
+                        </button>
+                      ) : (
+                        <span className="event-register-btn event-register-btn--disabled" aria-disabled="true" style={{textTransform: 'capitalize'}}>
+                          {details.regStatus || "Registration Opening Soon"}
+                        </span>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             ))
           )}
