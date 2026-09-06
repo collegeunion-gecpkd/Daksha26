@@ -1,0 +1,14 @@
+EventName,EventCategory,EventDate,EventStage,EventStart,EventState,RegistrationLink,Winner1,Winner1Year,Winner2,Winner2Year,Winner3,Winner3Year
+Pencil Drawing,Offstage,Offstage - Sep 16,Drawing Hall 1,10:00 AM,Scheduled,https://docs.google.com/forms/d/e/1FAIpQLSc-sample/viewform,,,,,,
+Essay Writing (English),Offstage,Offstage - Sep 16,Room 204,01:30 PM,Scheduled,,,,,,,,
+Water Colouring,Offstage,Offstage - Sep 17,Drawing Hall 2,10:00 AM,Scheduled,,,,,,,,
+Creative Writing (Malayalam),Offstage,Offstage - Sep 17,Room 205,02:00 PM,Scheduled,,,,,,,,
+Bharatanatyam,Onstage,Day 1 - Sep 22,Stage 1,09:30 AM,Scheduled,https://docs.google.com/forms/d/e/1FAIpQLSc-sample/viewform,,,,,,
+Mohiniyattam,Onstage,Day 1 - Sep 22,Stage 1,11:30 AM,Scheduled,,,,,,,,
+Classical Music (Solo),Onstage,Day 1 - Sep 22,Stage 2,10:00 AM,Scheduled,,,,,,,,
+Western Vocal (Solo),Onstage,Day 2 - Sep 23,Stage 1,10:00 AM,Scheduled,,,,,,,,
+Mime,Onstage,Day 2 - Sep 23,Stage 3,01:30 PM,Scheduled,,,,,,,,
+Folk Dance (Group),Onstage,Day 2 - Sep 23,Stage 1,03:00 PM,Scheduled,,,,,,,,
+Group Song (Indian),Onstage,Day 3 - Sep 24,Stage 2,10:00 AM,Scheduled,,,,,,,,
+Sync Dance (Group),Onstage,Day 3 - Sep 24,Stage 1,02:00 PM,Scheduled,,,,,,,,
+Nadanpattu,Onstage,Day 3 - Sep 24,Stage 3,04:30 PM,Result Announced,,Third Year,3rd Year,Fourth Year,4th Year,Second Year,2nd Year

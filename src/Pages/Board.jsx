@@ -72,7 +72,7 @@ function Board() {
     setError(null);
 
     fetch(
-      "https://script.google.com/macros/s/AKfycbyGujyOWsqlnFyJGPzIvICGVBLW1yqp99YDkTsb_7a2575PG--75PYZdAD00T0ziwyM/exec?type=points"
+      "https://script.google.com/macros/s/AKfycbxCw-ulTAh7K7olhKI_jNzDJZI8rc8S7ucLmCSWJDnh8bN8vyqbYf6SqPb7LRSuDllp/exec?type=points"
     )
       .then((response) => {
         if (!response.ok) throw new Error("HTTP " + response.status);

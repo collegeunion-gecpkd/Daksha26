@@ -21,6 +21,22 @@ function getEmbeddedFormUrl(url) {
   return url;
 }
 
+function formatDisplayTime(timeStr) {
+  if (!timeStr) return "";
+  const str = String(timeStr).trim();
+  if (str.includes("GMT") || str.includes("1899")) {
+    const match = str.match(/(\d{2}):(\d{2}):\d{2}/);
+    if (match) {
+      let hours = parseInt(match[1], 10);
+      const minutes = match[2];
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12;
+      return `${String(hours).padStart(2, "0")}:${minutes} ${ampm}`;
+    }
+  }
+  return str;
+}
+
 function Events() {
   const [eventData, setEventData] = useState(() => {
     try {
@@ -68,7 +84,7 @@ function Events() {
 
     // Primary: Google Sheets Apps Script / Web endpoint
     fetch(
-      "https://script.google.com/macros/s/AKfycbyGujyOWsqlnFyJGPzIvICGVBLW1yqp99YDkTsb_7a2575PG--75PYZdAD00T0ziwyM/exec?type=events"
+      "https://script.google.com/macros/s/AKfycbxCw-ulTAh7K7olhKI_jNzDJZI8rc8S7ucLmCSWJDnh8bN8vyqbYf6SqPb7LRSuDllp/exec?type=events"
     )
       .then((response) => {
         if (!response.ok) throw new Error("HTTP " + response.status);
@@ -246,9 +262,9 @@ function Events() {
                 </span>
 
                 {row.EventState === "Result Announced" ? (
-                  <span className="eventStartTime">Event Started At {row.EventStart}</span>
+                  <span className="eventStartTime">Event Started At {formatDisplayTime(row.EventStart)}</span>
                 ) : (
-                  <span className="eventStartTime">Event Starts At {row.EventStart}</span>
+                  <span className="eventStartTime">Event Starts At {formatDisplayTime(row.EventStart)}</span>
                 )}
 
                 {/* Winners with year */}
