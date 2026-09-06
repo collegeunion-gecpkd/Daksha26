@@ -1,4 +1,4 @@
-﻿@use "../styles/variables" as *;
+@use "../styles/variables" as *;
 
 .guidelines-page {
   width: 100%;
@@ -96,7 +96,16 @@
   }
 
   &__icon {
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: $color-red;
+    transition: all 0.25s $ease-quart-out;
   }
 
   &__title {

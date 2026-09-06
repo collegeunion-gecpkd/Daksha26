@@ -157,23 +157,23 @@ function Landing() {
             </div>
           </section>
 
-          {/* Title block: Daksha logo + tagline + dates (mobile stacks these vertically) */}
-          <div className="hero-title-block">
-            <div className="left-title anim-reveal-left">
-              <div className="title-fly">
-                <img src={DakshaTitle} alt="Daksha'26" className="title-png" />
-              </div>
-              <p className="title-tagline anim-fade-in-up-delayed">Annual Arts &amp; Cultural Fest</p>
+          {/* Hero title + tagline */}
+          <div className="left-title anim-reveal-left">
+            <div className="title-fly">
+              <img src={DakshaTitle} alt="Daksha'26" className="title-png" />
             </div>
-            <div className="bottom-left-dates anim-fade-in-up">
-              <div className="dates-row">
-                <span tabIndex={0}>22</span>
-                <span tabIndex={0}>23</span>
-                <span tabIndex={0}>24</span>
-              </div>
-              <div className="month-row">
-                <span className="red-text">S E P</span> T E M B E R
-              </div>
+            <p className="title-tagline anim-fade-in-up-delayed">Annual Arts &amp; Cultural Fest</p>
+          </div>
+
+          {/* Dates & month: bottom-left corner on desktop; positioned below tagline on mobile */}
+          <div className="bottom-left-dates anim-fade-in-up">
+            <div className="dates-row">
+              <span tabIndex={0}>22</span>
+              <span tabIndex={0}>23</span>
+              <span tabIndex={0}>24</span>
+            </div>
+            <div className="month-row">
+              <span className="red-text">S E P</span> T E M B E R
             </div>
           </div>
 

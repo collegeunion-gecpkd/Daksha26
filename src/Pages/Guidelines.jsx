@@ -25,7 +25,47 @@ const DOCS = [
   },
 ];
 
-const ICONS = { offstage: "🎨", onstage: "🎭", rulebook: "📖" };
+function IconOffstage() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z" />
+    </svg>
+  );
+}
+
+function IconOnstage() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 18h20" />
+      <path d="M4 18v3" />
+      <path d="M20 18v3" />
+      <path d="M12 2v6" />
+      <path d="M9 5l3 3 3-3" />
+      <path d="M6 14a6 6 0 0 0 12 0V8H6v6z" />
+    </svg>
+  );
+}
+
+function IconRulebook() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+      <path d="M6 6h10" />
+      <path d="M6 10h10" />
+      <path d="M6 14h6" />
+    </svg>
+  );
+}
+
+const ICONS = {
+  offstage: <IconOffstage />,
+  onstage: <IconOnstage />,
+  rulebook: <IconRulebook />,
+};
 
 function Guidelines() {
   return (

@@ -1,27 +1,32 @@
 [
   {
-    "teamName": "team1",
-    "year": "1st",
-    "point": 10
+    "teamName": "Third Year",
+    "year": "Third",
+    "point": 120
   },
   {
-    "teamName": "team2",
-    "year": "2nd",
-    "point": 30
+    "teamName": "Fourth Year",
+    "year": "Fourth",
+    "point": 105
   },
   {
-    "teamName": "team3",
-    "year": "3rd",
-    "point": 20
+    "teamName": "Second Year",
+    "year": "Second",
+    "point": 80
   },
   {
-    "teamName": "team4",
-    "year": "4th",
-    "point": 5
+    "teamName": "First Year",
+    "year": "First",
+    "point": 65
   },
   {
-    "teamName": "team5",
-    "year": "M.tech 1st",
-    "point": 5
+    "teamName": "M.Tech 1st Year",
+    "year": "MTech First",
+    "point": 35
+  },
+  {
+    "teamName": "M.Tech 2nd Year",
+    "year": "MTech Second",
+    "point": 25
   }
 ]

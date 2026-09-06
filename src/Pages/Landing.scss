@@ -255,25 +255,20 @@ html[data-landing-scroll] {
   letter-spacing: 0.3em;
 }
 
-// ── Title block wrapper (desktop: transparent passthrough, mobile: flex column) ──
-.hero-title-block {
-  position: absolute;
-  top: 50%;
-  left: clamp(28px, 6vw, 90px);
-  z-index: $z-title-fly;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  pointer-events: none;
-}
 
 // ── Title fly ─────────────────────────────────────────────────
 .left-title {
+  position: absolute;
+  top: 50%;
+  left: clamp(28px, 6vw, 90px);
   width: clamp(240px, 36vw, 560px);
+  z-index: $z-title-fly;
+  transform: translateY(-50%) translateX(-40px);
+  transform-origin: top left;
   opacity: 0;
-  transform: translateX(-40px);
-  transition: opacity 1.1s $ease-expo-out 0.5s, transform 1.1s $ease-expo-out 0.5s;
+  transition:
+    opacity 1.1s $ease-expo-out 0.5s,
+    transform 1.1s $ease-expo-out 0.5s;
   pointer-events: none;
 
   .title-fly {
@@ -289,17 +284,18 @@ html[data-landing-scroll] {
   }
 }
 
-.landing--revealed .hero-title-block {
-  .left-title {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.landing--revealed .left-title {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
+// On desktop scroll to info view: smooth fly animation toward top-left navbar logo
 .landing--revealed .is-info .left-title {
-  opacity: 0;
-  transform: translateX(0);
-  transition: opacity 0.35s $snap-ease;
+  opacity: 0.9;
+  transform: translate(calc(clamp(1rem, 4vw, 3rem) - clamp(28px, 6vw, 90px)), calc(-50vh + 34px)) scale(0.26);
+  transition:
+    opacity 0.85s $ease-expo-out,
+    transform 0.85s $ease-expo-out;
   pointer-events: none;
 }
 
@@ -323,22 +319,28 @@ html[data-landing-scroll] {
 .is-info .title-tagline {
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .is-info .bottom-left-dates,
 .is-snapping .bottom-left-dates {
   pointer-events: none;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-// ── Dates — below title in hero-title-block ──────────────────
+// ── Dates — bottom left corner on desktop ─────────────────────
 .bottom-left-dates {
-  // desktop: flows naturally below .left-title in .hero-title-block
+  position: absolute;
+  bottom: clamp(36px, 5vh, 64px);
+  left: clamp(28px, 4vw, 60px);
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   pointer-events: auto;
-  margin-top: 2rem;
+  z-index: 2;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 
   .dates-row {
     display: flex;
@@ -519,11 +521,13 @@ html[data-landing-scroll] {
 }
 
 .info-footer {
-  font-size: 0.65rem;
-  letter-spacing: 0.4em;
+  font-size: clamp(0.76rem, 1.2vw, 0.92rem);
+  letter-spacing: 0.35em;
   color: $color-gray-400;
   text-transform: uppercase;
   opacity: 0;
+  margin-top: auto;
+  padding-top: 1.5rem;
   transition: opacity 0.45s $snap-ease 0.2s;
   .red-text { color: $color-red; }
 }
@@ -557,10 +561,9 @@ html[data-landing-scroll] {
 
 // ── Responsive — tablet ───────────────────────────────────────────
 @media screen and (max-width: #{$bp-lg}) {
-  // --pan-distance stays 100vw; no change needed — always one viewport
   .left-title        { left: clamp(20px, 4vw, 40px); }
   .top-left          { left: clamp(20px, 4vw, 40px); }
-  .hero-title-block  { left: clamp(20px, 4vw, 40px); }
+  .bottom-left-dates { left: clamp(20px, 4vw, 40px); }
   .bottom-right      { right: clamp(20px, 4vw, 40px); }
   .info-panel        { right: clamp(20px, 5vw, 50px); }
   .hero-vline        { left: clamp(20px, 4vw, 40px); }
@@ -570,32 +573,32 @@ html[data-landing-scroll] {
 @media screen and (max-width: #{$bp-md}) {
   .corner-text { font-size: 0.55rem; }
 
-  // On mobile the hero-title-block becomes a centered column stack:
-  // Daksha font → tagline → dates → month (top-center of screen)
-  .hero-title-block {
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    align-items: center;
-    width: min(90vw, 340px);
-  }
-
+  // Mobile hero title placed in top-center
   .left-title {
-    width: 100%;
+    left: 50%;
+    top: 36%;
+    width: min(88vw, 320px);
     text-align: center;
-    transform: translateX(0); // no slide on mobile
+    transform: translate(-50%, -50%);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+
     .title-png { animation: none; }
   }
 
-  // Ensure reveal animation works on mobile (no X slide)
-  .landing--revealed .hero-title-block .left-title {
+  .landing--revealed .left-title {
     opacity: 1;
-    transform: translateX(0);
+    transform: translate(-50%, -50%);
   }
 
   .bottom-left-dates {
+    position: absolute;
+    top: calc(36% + 72px);
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
     align-items: center;
-    margin-top: 1.5rem;
+    margin-top: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
 
     .dates-row {
       justify-content: center;
@@ -613,6 +616,17 @@ html[data-landing-scroll] {
     text-align: center;
     margin-top: 0.6rem;
     width: 100%;
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  }
+
+  // Hide Daksha font, tagline, and dates completely when scrolled to info slide on mobile
+  .is-info .left-title,
+  .is-info .title-tagline,
+  .is-info .bottom-left-dates {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translate(-50%, -70%) scale(0.9) !important;
   }
 
   .scroll-hint   { display: none; }
@@ -621,27 +635,39 @@ html[data-landing-scroll] {
   .section-info  { transform: none; }
   .is-info .section-info { transform: none; }
 
+  // Mobile info-panel: starts from top, cleanly padded below the header
   .info-panel {
     position: absolute;
-    top: auto;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     transform: none;
     width: 100%;
-    max-height: 85vh;
-    max-height: 85dvh;
+    height: 100%;
+    max-height: 100dvh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
-    padding: 2rem clamp(20px, 5vw, 36px) clamp(2rem, 5vh, 3.5rem);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.98) 75%, transparent);
+    padding: clamp(4.5rem, 12vh, 6rem) clamp(20px, 6vw, 36px) clamp(2rem, 5vh, 3.5rem);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.98) 75%, rgba(0, 0, 0, 0.9) 100%);
     box-sizing: border-box;
-    gap: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1.5rem;
   }
 
   .info-accent-bar { display: none; }
-  .info-footer     { display: none; }
+
+  .info-footer {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-align: center;
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
 
   .bg-overlay--left,
   .bg-overlay--right {
