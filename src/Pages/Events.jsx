@@ -11,16 +11,6 @@ const FILTER_CHIPS = [
   { label: "Day 3",    key: "Day 3" },
 ];
 
-function getEmbeddedFormUrl(url) {
-  if (!url) return "";
-  if (url.includes("viewform")) {
-    return url.includes("embedded=true")
-      ? url
-      : `${url}${url.includes("?") ? "&" : "?"}embedded=true`;
-  }
-  return url;
-}
-
 function formatDisplayTime(timeStr) {
   if (!timeStr) return "";
   const str = String(timeStr).trim();
@@ -52,13 +42,25 @@ function Events() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [activeRegEvent, setActiveRegEvent] = useState(null);
-  const [iframeLoading, setIframeLoading] = useState(true);
+
+  // Custom Form States
+  const [formData, setFormData] = useState({
+    Name: "",
+    Email: "",
+    Phone: "",
+    Department: "",
+    Year: "",
+    RegNo: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   // Close modal on ESC key
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && activeRegEvent) {
-        setActiveRegEvent(null);
+        closeRegistrationModal();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -186,12 +188,56 @@ function Events() {
     : [];
 
   const openRegistrationModal = (event) => {
-    setIframeLoading(true);
     setActiveRegEvent(event);
+    setSubmitSuccess(false);
+    setSubmitError(null);
+    setFormData({ Name: "", Email: "", Phone: "", Department: "", Year: "", RegNo: "" });
   };
 
   const closeRegistrationModal = () => {
     setActiveRegEvent(null);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+
+    try {
+      // Replace with your Web App URL later if it changes
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbyNYEXJ3_ZE0THqDdskKYnDE3PzSgzES2hBrV9ILEmYyvuiBpZHuivXQZwhiSgHONgx/exec";
+      
+      const payload = {
+        ...formData,
+        EventName: activeRegEvent.EventName
+      };
+
+      const response = await fetch(webAppUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(payload),
+      });
+      
+      const result = await response.json();
+      if (result.result === "success") {
+        setSubmitSuccess(true);
+        setFormData({ Name: "", Email: "", Phone: "", Department: "", Year: "", RegNo: "" });
+      } else {
+        throw new Error(result.error || "Unknown error");
+      }
+    } catch (err) {
+      setSubmitError("Failed to submit registration. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -279,7 +325,7 @@ function Events() {
                 </span>
 
                 {/* In-Site Register Button */}
-                {row.RegistrationLink ? (
+                {(row.RegistrationStatus && row.RegistrationStatus.toLowerCase() === "open") ? (
                   <button
                     type="button"
                     onClick={() => openRegistrationModal(row)}
@@ -288,8 +334,8 @@ function Events() {
                     Register
                   </button>
                 ) : (
-                  <span className="event-register-btn event-register-btn--disabled" aria-disabled="true">
-                    Registration Opening Soon
+                  <span className="event-register-btn event-register-btn--disabled" aria-disabled="true" style={{textTransform: 'capitalize'}}>
+                    {row.RegistrationStatus || "Registration Opening Soon"}
                   </span>
                 )}
               </div>
@@ -298,7 +344,7 @@ function Events() {
         </div>
       )}
 
-      {/* In-Site Google Form Registration Modal */}
+      {/* In-Site Custom Registration Modal */}
       {activeRegEvent && (
         <div
           className="reg-modal-overlay"
@@ -330,19 +376,74 @@ function Events() {
               </button>
             </div>
 
-            <div className="reg-modal__body">
-              {iframeLoading && (
-                <div className="reg-modal__loading">
-                  <Spinner />
-                  <p>Loading registration form…</p>
+            <div className="reg-modal__body reg-modal__body--custom">
+              {submitSuccess ? (
+                <div className="reg-success-message">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width: '64px', height: '64px', stroke: '#4caf50', margin: '0 auto 1rem', display: 'block'}}>
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <h3 style={{color: 'white', marginBottom: '0.5rem', fontSize: '1.5rem', textAlign: 'center'}}>Registration Successful!</h3>
+                  <p style={{color: 'rgba(255,255,255,0.7)', marginBottom: '1.5rem', textAlign: 'center'}}>You have successfully registered for {activeRegEvent.EventName}.</p>
+                  <button type="button" onClick={closeRegistrationModal} className="reg-submit-btn" style={{marginTop: '1rem'}}>Close</button>
                 </div>
+              ) : (
+                <form onSubmit={handleFormSubmit} className="custom-reg-form">
+                  {submitError && <div className="reg-error-message">{submitError}</div>}
+                  
+                  <div className="form-group">
+                    <label htmlFor="Name">Full Name</label>
+                    <input type="text" id="Name" name="Name" value={formData.Name} onChange={handleInputChange} required placeholder="e.g. John Doe" />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label htmlFor="Email">Email Address</label>
+                    <input type="email" id="Email" name="Email" value={formData.Email} onChange={handleInputChange} required placeholder="e.g. john@example.com" />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="Phone">Phone Number</label>
+                    <input type="tel" id="Phone" name="Phone" value={formData.Phone} onChange={handleInputChange} required placeholder="e.g. 9876543210" />
+                  </div>
+
+                  <div className="form-group-row" style={{display: 'flex', gap: '1rem'}}>
+                    <div className="form-group" style={{flex: 1}}>
+                      <label htmlFor="Department">Department</label>
+                      <select id="Department" name="Department" value={formData.Department} onChange={handleInputChange} required>
+                        <option value="" disabled>Select dept</option>
+                        <option value="CE">CE</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="EEE">EEE</option>
+                        <option value="IT">IT</option>
+                        <option value="MECH">MECH</option>
+                      </select>
+                    </div>
+
+                    <div className="form-group" style={{flex: 1}}>
+                      <label htmlFor="Year">Year of Study</label>
+                      <select id="Year" name="Year" value={formData.Year} onChange={handleInputChange} required>
+                        <option value="" disabled>Select year</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                        <option value="MTech 1st Year">MTech 1st Year</option>
+                        <option value="MTech 2nd Year">MTech 2nd Year</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="RegNo">University Reg No (Optional)</label>
+                    <input type="text" id="RegNo" name="RegNo" value={formData.RegNo} onChange={handleInputChange} placeholder="e.g. PKD20CS001" />
+                  </div>
+
+                  <button type="submit" className="reg-submit-btn" disabled={isSubmitting}>
+                    {isSubmitting ? "Submitting..." : "Complete Registration"}
+                  </button>
+                </form>
               )}
-              <iframe
-                src={getEmbeddedFormUrl(activeRegEvent.RegistrationLink)}
-                title={`Register for ${activeRegEvent.EventName}`}
-                className="reg-modal__iframe"
-                onLoad={() => setIframeLoading(false)}
-              />
             </div>
           </div>
         </div>
