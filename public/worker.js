@@ -2,7 +2,7 @@ const CACHE_NAME = 'daksha26-v2';
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',
-  '/daksha.png',
+  '/daksha.webp',
   '/icon-192x192.png',
   '/icon-512x512.png',
   '/boardData.json'

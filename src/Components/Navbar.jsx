@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 
 import "./Navbar.scss";
-import DakshaLogo from "../assets/dakshafont.png";
+import DakshaLogo from "../assets/dakshafont.webp";
 
 // Navigation items — update hrefs/routes as needed
 const NAV_LINKS = [

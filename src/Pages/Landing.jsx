@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Landing.scss";
-import DakshaTitle from "../assets/dakshafont.png";
-import HeroBG from "../assets/dakshaBG.jpg";
-import PanBG from "../assets/bg2.jpg";
+import DakshaTitle from "../assets/dakshafont.webp";
+import HeroBG from "../assets/dakshaBG.webp";
+import PanBG from "../assets/bg2.webp";
 
 const SNAP_MS = 720;
 
