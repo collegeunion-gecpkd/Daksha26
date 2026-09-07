@@ -21,7 +21,7 @@ const DOCS = [
     number: "03",
     title: "Daksha'26 Rulebook",
     description: "The official rulebook covering general conduct, scoring, eligibility, and the complete event framework for Daksha'26.",
-    href: "https://drive.google.com/file/d/1kzZ_Fs5b_DDwW85-b8l4qlriNQTr4bHH/view?usp=sharing",
+    href: "https://drive.google.com/file/d/1kZX9v5mFyee_PhdvwYi90MsWwJHln4GV/view?usp=sharing",
   },
 ];
 

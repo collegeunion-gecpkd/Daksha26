@@ -71,9 +71,17 @@ function Board() {
 
     setError(null);
 
-    fetch(
-      "https://script.google.com/macros/s/AKfycbxCw-ulTAh7K7olhKI_jNzDJZI8rc8S7ucLmCSWJDnh8bN8vyqbYf6SqPb7LRSuDllp/exec?type=points"
-    )
+    const readApiUrl = import.meta.env.VITE_APPS_SCRIPT_READ_URL;
+
+    // If env variable is missing, display configuration error
+    if (!readApiUrl) {
+      setError("Leaderboard service is not configured. Please contact the union coordinators.");
+      setIsLoading(false);
+      setIsRefreshing(false);
+      return;
+    }
+
+    fetch(`${readApiUrl}?type=points`)
       .then((response) => {
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
@@ -95,45 +103,17 @@ function Board() {
           } catch (e) {
             void e;
           }
-          setIsLoading(false);
-          setIsRefreshing(false);
+          setError(null);
         } else {
           throw new Error("Invalid points data format");
         }
       })
       .catch(() => {
-        // Fallback to bundled board data
-        fetch("/boardData.json")
-          .then((res) => res.json())
-          .then((localData) => {
-            if (Array.isArray(localData) && localData.length > 0) {
-              const formatted = localData
-                .map((item) => ({
-                  YearName: item.teamName,
-                  Year: item.year,
-                  Point: Number(item.point ?? 0),
-                }))
-                .sort((a, b) => b.Point - a.Point);
-
-              setBoardData(formatted);
-              setLastUpdatedTime(new Date());
-              try {
-                localStorage.setItem("daksha_board_cache_v2", JSON.stringify(formatted));
-              } catch (e) {
-                void e;
-              }
-              setError(null);
-            } else {
-              setError("Failed to load leaderboard.");
-            }
-          })
-          .catch(() => {
-            setError("Failed to load leaderboard. Please check your connection.");
-          })
-          .finally(() => {
-            setIsLoading(false);
-            setIsRefreshing(false);
-          });
+        setError("Unable to connect to live leaderboard. Please check your internet connection.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsRefreshing(false);
       });
   }, [boardData.length]);
 

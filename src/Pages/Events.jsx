@@ -113,9 +113,16 @@ function Events() {
     setError(null);
 
     // Primary: Google Sheets Apps Script / Web endpoint
-    fetch(
-      "https://script.google.com/macros/s/AKfycbxCw-ulTAh7K7olhKI_jNzDJZI8rc8S7ucLmCSWJDnh8bN8vyqbYf6SqPb7LRSuDllp/exec?type=events"
-    )
+    const readApiUrl = import.meta.env.VITE_APPS_SCRIPT_READ_URL;
+
+    // If env variable is not configured, directly show configuration error
+    if (!readApiUrl) {
+      setError("Events service is not configured. Please contact the union coordinators.");
+      setIsLoading(false);
+      return;
+    }
+
+    fetch(`${readApiUrl}?type=events`)
       .then((response) => {
         if (!response.ok) throw new Error("HTTP " + response.status);
         return response.json();
@@ -128,34 +135,16 @@ function Events() {
           } catch (e) {
             void e;
           }
-          setIsLoading(false);
+          setError(null);
         } else {
           throw new Error("Invalid remote data format");
         }
       })
       .catch(() => {
-        // Fallback: Bundled events data (works offline and on slow 4G)
-        fetch("/eventsData.json")
-          .then((res) => res.json())
-          .then((fallbackData) => {
-            if (Array.isArray(fallbackData) && fallbackData.length > 0) {
-              setEventData(fallbackData);
-              try {
-                localStorage.setItem("daksha_events_cache_v2", JSON.stringify(fallbackData));
-              } catch (e) {
-                void e;
-              }
-              setError(null);
-            } else {
-              setError("Failed to load events. Please check your connection.");
-            }
-          })
-          .catch(() => {
-            setError("Failed to load events. Please check your connection.");
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
+        setError("Unable to load live events. Please check your internet connection.");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [eventData.length]);
 
@@ -238,9 +227,14 @@ function Events() {
     setSubmitSuccess(false);
 
     try {
-      // Replace with your Web App URL later if it changes
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbyNYEXJ3_ZE0THqDdskKYnDE3PzSgzES2hBrV9ILEmYyvuiBpZHuivXQZwhiSgHONgx/exec";
+      const webAppUrl = import.meta.env.VITE_APPS_SCRIPT_REGISTRATION_URL;
       
+      if (!webAppUrl) {
+        setSubmitError("Registration endpoint is not configured. Please contact the union coordinators.");
+        setIsSubmitting(false);
+        return;
+      }
+
       const payload = {
         ...formData,
         EventName: activeRegEvent.EventName
