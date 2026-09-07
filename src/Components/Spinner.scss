@@ -4,17 +4,10 @@
   align-items: center;
   padding: 5rem 2rem;
 
-  &__ring {
+  &__gif {
     display: block;
-    width: 36px;
-    height: 36px;
-    border: 1.5px solid rgba(255, 255, 255, 0.08);
-    border-top-color: #cc0000;
-    border-radius: 50%;
-    animation: spinnerRotate 0.75s linear infinite;
+    width: 60px; /* Adjust size as needed */
+    height: auto;
+    border-radius: 50%; /* If you want to keep the circular look */
   }
-}
-
-@keyframes spinnerRotate {
-  to { transform: rotate(360deg); }
 }
