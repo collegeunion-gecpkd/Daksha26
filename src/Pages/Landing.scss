@@ -5,8 +5,15 @@ $snap-ms: 0.72s;
 $snap-ease: $ease-expo-out;
 
 @keyframes snapVeil {
-  0%, 100% { opacity: 0; }
-  50%      { opacity: 0.22; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.22;
+  }
 }
 
 // ============================================================
@@ -24,12 +31,35 @@ $snap-ease: $ease-expo-out;
   &--revealed {
     opacity: 1;
 
-    .anim-fade-in-down        { opacity: 1; transform: translateY(0); }
-    .anim-reveal-left         { opacity: 1; transform: translateX(0); }
-    .anim-fade-in-up          { opacity: 1; transform: translateY(0); }
-    .anim-fade-in-right       { opacity: 1; transform: translateX(0); }
-    .anim-fade-in-up-delayed:not(.title-tagline)  { opacity: 1; transform: translateY(0); }
-    .anim-vline               { transform: scaleY(1); opacity: 0.18; }
+    .anim-fade-in-down {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .anim-reveal-left {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .anim-fade-in-up {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .anim-fade-in-right {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .anim-fade-in-up-delayed:not(.title-tagline) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .anim-vline {
+      transform: scaleY(1);
+      opacity: 0.18;
+    }
 
     .scroll-hint.anim-fade-in-up {
       opacity: 1;
@@ -82,7 +112,7 @@ $snap-ease: $ease-expo-out;
   position: absolute;
   top: 0;
   height: 100%;
-  width: 100vw;          // each panel = one viewport wide
+  width: 100vw; // each panel = one viewport wide
   object-fit: cover;
   backface-visibility: hidden;
 
@@ -107,13 +137,11 @@ $snap-ease: $ease-expo-out;
 
   // Left vignette — protects hero text on dakshaBG; fades as bg2 arrives
   &--left {
-    background: linear-gradient(
-      105deg,
-      rgba(0, 0, 0, 0.97) 0%,
-      rgba(0, 0, 0, 0.80) 28%,
-      rgba(0, 0, 0, 0.28) 56%,
-      rgba(0, 0, 0, 0.00) 100%
-    );
+    background: linear-gradient(105deg,
+        rgba(0, 0, 0, 0.97) 0%,
+        rgba(0, 0, 0, 0.80) 28%,
+        rgba(0, 0, 0, 0.28) 56%,
+        rgba(0, 0, 0, 0.00) 100%);
     // At progress=0: full strength. Stays mostly until bg2 takes over.
     opacity: 1;
     transition: opacity $snap-ms $snap-ease;
@@ -121,31 +149,32 @@ $snap-ease: $ease-expo-out;
 
   // Right vignette — grows as bg2 comes in; gives info panel a dark canvas
   &--right {
-    background: linear-gradient(
-      255deg,
-      rgba(0, 0, 0, 0.97) 0%,
-      rgba(0, 0, 0, 0.82) 30%,
-      rgba(0, 0, 0, 0.25) 60%,
-      rgba(0, 0, 0, 0.00) 100%
-    );
+    background: linear-gradient(255deg,
+        rgba(0, 0, 0, 0.97) 0%,
+        rgba(0, 0, 0, 0.82) 30%,
+        rgba(0, 0, 0, 0.25) 60%,
+        rgba(0, 0, 0, 0.00) 100%);
     opacity: 0;
     transition: opacity $snap-ms $snap-ease;
   }
 
   // Top vignette — always present to keep navbar legible
   &--top {
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.75) 0%,
-      rgba(0, 0, 0, 0.18) 18%,
-      transparent 40%
-    );
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.75) 0%,
+        rgba(0, 0, 0, 0.18) 18%,
+        transparent 40%);
     opacity: 1;
   }
 }
 
-.is-info .bg-overlay--left  { opacity: 0.45; }
-.is-info .bg-overlay--right { opacity: 1; }
+.is-info .bg-overlay--left {
+  opacity: 0.45;
+}
+
+.is-info .bg-overlay--right {
+  opacity: 1;
+}
 
 .bg-pan-fade {
   position: absolute;
@@ -213,19 +242,17 @@ html[data-landing-scroll] {
   bottom: clamp(100px, 15vh, 160px);
   left: clamp(28px, 6vw, 90px);
   width: 1px;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgba(255, 255, 255, 0.15) 20%,
-    rgba(255, 255, 255, 0.15) 80%,
-    transparent
-  );
+  background: linear-gradient(to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0.15) 80%,
+      transparent);
   transform-origin: top center;
   transform: scaleY(0);
   opacity: 0;
   transition:
     transform 1.6s $ease-expo-out 0.6s,
-    opacity   1.6s $ease-expo-out 0.6s;
+    opacity 1.6s $ease-expo-out 0.6s;
 }
 
 // ── Corner texts ──────────────────────────────────────────────
@@ -237,8 +264,13 @@ html[data-landing-scroll] {
   text-transform: uppercase;
   line-height: 1.6;
 
-  p { margin: 0; }
-  .red-text { color: $color-red; }
+  p {
+    margin: 0;
+  }
+
+  .red-text {
+    color: $color-red;
+  }
 }
 
 .top-left {
@@ -381,7 +413,10 @@ html[data-landing-scroll] {
     margin-top: 0.35rem;
     padding-left: 2px;
     text-shadow: none;
-    .red-text { color: $color-red; }
+
+    .red-text {
+      color: $color-red;
+    }
   }
 }
 
@@ -423,7 +458,9 @@ html[data-landing-scroll] {
   transition: width 0.5s $snap-ease 0.12s;
 }
 
-.is-info .info-accent-bar { width: 48px; }
+.is-info .info-accent-bar {
+  width: 48px;
+}
 
 .info-desc {
   display: flex;
@@ -475,10 +512,10 @@ html[data-landing-scroll] {
   opacity: 0;
   transform: translateX(10px);
   transition:
-    color        0.25s $ease-quart-out,
+    color 0.25s $ease-quart-out,
     padding-left 0.25s $ease-expo-out,
-    opacity      0.28s $snap-ease,
-    transform    0.28s $snap-ease;
+    opacity 0.28s $snap-ease,
+    transform 0.28s $snap-ease;
 
   &:hover,
   &:focus-visible {
@@ -486,8 +523,14 @@ html[data-landing-scroll] {
     padding-left: 8px;
     outline: none;
 
-    .info-link__number { color: $color-red; }
-    .info-link__arrow  { color: $color-red; transform: translateX(6px); }
+    .info-link__number {
+      color: $color-red;
+    }
+
+    .info-link__arrow {
+      color: $color-red;
+      transform: translateX(6px);
+    }
   }
 
   &__number {
@@ -518,10 +561,10 @@ html[data-landing-scroll] {
   opacity: 1;
   transform: none;
   transition:
-    color        0.25s $ease-quart-out,
+    color 0.25s $ease-quart-out,
     padding-left 0.25s $ease-expo-out,
-    opacity      0.4s $snap-ease calc(0.1s + var(--link-delay, 0) * 0.06s),
-    transform    0.4s $snap-ease calc(0.1s + var(--link-delay, 0) * 0.06s);
+    opacity 0.4s $snap-ease calc(0.1s + var(--link-delay, 0) * 0.06s),
+    transform 0.4s $snap-ease calc(0.1s + var(--link-delay, 0) * 0.06s);
 }
 
 .info-footer {
@@ -533,10 +576,15 @@ html[data-landing-scroll] {
   margin-top: auto;
   padding-top: 1.5rem;
   transition: opacity 0.45s $snap-ease 0.2s;
-  .red-text { color: $color-red; }
+
+  .red-text {
+    color: $color-red;
+  }
 }
 
-.is-info .info-footer { opacity: 1; }
+.is-info .info-footer {
+  opacity: 1;
+}
 
 // ── Entrance keyframe triggers ────────────────────────────────
 .anim-fade-in-down {
@@ -565,17 +613,36 @@ html[data-landing-scroll] {
 
 // ── Responsive — tablet ───────────────────────────────────────────
 @media screen and (max-width: #{$bp-lg}) {
-  .left-title        { left: clamp(20px, 4vw, 40px); }
-  .top-left          { left: clamp(20px, 4vw, 40px); }
-  .bottom-left-dates { left: clamp(20px, 4vw, 40px); }
-  .bottom-right      { right: clamp(20px, 4vw, 40px); }
-  .info-panel        { right: clamp(20px, 5vw, 50px); }
-  .hero-vline        { left: clamp(20px, 4vw, 40px); }
+  .left-title {
+    left: clamp(20px, 4vw, 40px);
+  }
+
+  .top-left {
+    left: clamp(20px, 4vw, 40px);
+  }
+
+  .bottom-left-dates {
+    left: clamp(20px, 4vw, 40px);
+  }
+
+  .bottom-right {
+    right: clamp(20px, 4vw, 40px);
+  }
+
+  .info-panel {
+    right: clamp(20px, 5vw, 50px);
+  }
+
+  .hero-vline {
+    left: clamp(20px, 4vw, 40px);
+  }
 }
 
 // ── Responsive — mobile ───────────────────────────────────────
 @media screen and (max-width: #{$bp-md}) {
-  .corner-text { font-size: 0.55rem; }
+  .corner-text {
+    font-size: 0.55rem;
+  }
 
   // Mobile hero title placed in top-center
   .left-title {
@@ -586,7 +653,9 @@ html[data-landing-scroll] {
     transform: translate(-50%, -50%);
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
 
-    .title-png { animation: none; }
+    .title-png {
+      animation: none;
+    }
   }
 
   .landing--revealed .left-title {
@@ -640,11 +709,21 @@ html[data-landing-scroll] {
     transform: translate(0, -20px) scale(0.9) !important;
   }
 
-  .scroll-hint   { display: none; }
-  .hero-vline    { display: none; }
+  .scroll-hint {
+    display: none;
+  }
 
-  .section-info  { transform: none; }
-  .is-info .section-info { transform: none; }
+  .hero-vline {
+    display: none;
+  }
+
+  .section-info {
+    transform: none;
+  }
+
+  .is-info .section-info {
+    transform: none;
+  }
 
   // Mobile info-panel: nicely centered vertically on the screen
   .info-panel {
@@ -661,12 +740,10 @@ html[data-landing-scroll] {
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     padding: clamp(5rem, 14vh, 7rem) clamp(20px, 6vw, 36px) clamp(2rem, 6vh, 3.5rem);
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.72) 0%,
-      rgba(0, 0, 0, 0.82) 40%,
-      rgba(0, 0, 0, 0.94) 100%
-    );
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.72) 0%,
+        rgba(0, 0, 0, 0.82) 40%,
+        rgba(0, 0, 0, 0.94) 100%);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -690,29 +767,30 @@ html[data-landing-scroll] {
   }
 
   .bg-overlay--left {
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.75) 0%,
-      rgba(0, 0, 0, 0.45) 50%,
-      rgba(0, 0, 0, 0.85) 100%
-    );
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.75) 0%,
+        rgba(0, 0, 0, 0.45) 50%,
+        rgba(0, 0, 0, 0.85) 100%);
     opacity: 1;
     transition: opacity $snap-ms $snap-ease;
   }
 
   .bg-overlay--right {
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.85) 0%,
-      rgba(0, 0, 0, 0.5) 45%,
-      rgba(0, 0, 0, 0.88) 100%
-    );
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.5) 45%,
+        rgba(0, 0, 0, 0.88) 100%);
     opacity: 0;
     transition: opacity $snap-ms $snap-ease;
   }
 
-  .is-info .bg-overlay--left  { opacity: 0.3; }
-  .is-info .bg-overlay--right { opacity: 0.75; }
+  .is-info .bg-overlay--left {
+    opacity: 0.3;
+  }
+
+  .is-info .bg-overlay--right {
+    opacity: 0.75;
+  }
 }
 
 // ── Reduced motion ────────────────────────────────────────────
@@ -736,14 +814,24 @@ html[data-landing-scroll] {
     will-change: auto;
   }
 
-  .bg-pan-fade { display: none; }
+  .bg-pan-fade {
+    display: none;
+  }
 
-  .bg-img--pan  { display: none; }
-  .bg-img--hero { animation: none; }
+  .bg-img--pan {
+    display: none;
+  }
+
+  .bg-img--hero {
+    animation: none;
+  }
 
   .bg-overlay {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
     height: 100vh;
     will-change: auto;
   }
@@ -765,22 +853,42 @@ html[data-landing-scroll] {
     transform: none;
   }
 
-  .section-info { background-color: $color-black; }
+  .section-info {
+    background-color: $color-black;
+  }
 
-  .scroll-hint { display: none; }
-  .hero-vline  { display: none; }
+  .scroll-hint {
+    display: none;
+  }
+
+  .hero-vline {
+    display: none;
+  }
 
   .left-title .title-png,
-  .title-fly { animation: none; transform: none !important; }
+  .title-fly {
+    animation: none;
+    transform: none !important;
+  }
 
   .info-desc .info-tagline,
   .info-desc .info-college,
   .info-desc .info-body,
   .info-footer,
-  .info-link  { opacity: 1; transform: none; }
+  .info-link {
+    opacity: 1;
+    transform: none;
+  }
 
-  .info-accent-bar { width: 48px; }
+  .info-accent-bar {
+    width: 48px;
+  }
 
-  .bg-overlay--left  { opacity: 1; }
-  .bg-overlay--right { opacity: 0; }
+  .bg-overlay--left {
+    opacity: 1;
+  }
+
+  .bg-overlay--right {
+    opacity: 0;
+  }
 }
