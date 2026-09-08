@@ -59,7 +59,7 @@ function getEventDetails(row) {
 function Events() {
   const [eventData, setEventData] = useState(() => {
     try {
-      const cached = localStorage.getItem("daksha_events_cache_v2");
+      const cached = localStorage.getItem("daksha_events_cache_v3");
       return cached ? JSON.parse(cached) : [];
     } catch {
       return [];
@@ -132,7 +132,7 @@ function Events() {
         if (data && Array.isArray(data.data) && data.data.length > 0) {
           setEventData(data.data);
           try {
-            localStorage.setItem("daksha_events_cache_v2", JSON.stringify(data.data));
+            localStorage.setItem("daksha_events_cache_v3", JSON.stringify(data.data));
           } catch (e) {
             void e;
           }

@@ -6,8 +6,10 @@
 
   &__gif {
     display: block;
-    width: 60px; /* Adjust size as needed */
+    width: auto;
     height: auto;
-    border-radius: 50%; /* If you want to keep the circular look */
+    max-width: 100%;
+    /* Hide the GIF's solid background to show only the animation */
+    mix-blend-mode: screen; 
   }
 }

@@ -32,7 +32,7 @@ function getBatchInfo(rawYear, rawName) {
 function Board() {
   const [boardData, setBoardData] = useState(() => {
     try {
-      const cached = localStorage.getItem("daksha_board_cache_v2");
+      const cached = localStorage.getItem("daksha_board_cache_v3");
       return cached ? JSON.parse(cached) : [];
     } catch {
       return [];
@@ -100,7 +100,7 @@ function Board() {
           setBoardData(sorted);
           setLastUpdatedTime(new Date());
           try {
-            localStorage.setItem("daksha_board_cache_v2", JSON.stringify(sorted));
+            localStorage.setItem("daksha_board_cache_v3", JSON.stringify(sorted));
           } catch (e) {
             void e;
           }

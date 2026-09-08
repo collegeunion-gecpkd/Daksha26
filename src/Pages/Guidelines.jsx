@@ -8,7 +8,7 @@ const DOCS = [
     number: "01",
     title: "Offstage Events Guidelines",
     description: "Rules and regulations governing all offstage cultural events across the three days of Daksha'26.",
-    href: "https://drive.google.com/file/d/10P18Hy6rrOZFU1ws_oCSjLG14arOinEH/view?usp=sharing",
+    href: "https://drive.google.com/file/d/1S28yCDcbk2iSjbhaRE_9DSSjEHxc3QZp/view?usp=sharing",
   },
   {
     id: "onstage",
