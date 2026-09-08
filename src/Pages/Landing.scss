@@ -596,10 +596,10 @@ html[data-landing-scroll] {
 
   .bottom-left-dates {
     position: absolute;
-    top: calc(36% + 72px);
+    top: calc(36% + 130px);
     bottom: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    width: 100%;
     align-items: center;
     margin-top: 0;
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
@@ -623,14 +623,21 @@ html[data-landing-scroll] {
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
   }
 
-  // Hide Daksha font, tagline, and dates completely when scrolled to info slide on mobile
+  // Hide Daksha font, tagline completely when scrolled to info slide on mobile
   .is-info .left-title,
-  .is-info .title-tagline,
-  .is-info .bottom-left-dates {
+  .is-info .title-tagline {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
     transform: translate(-50%, -70%) scale(0.9) !important;
+  }
+
+  // Animate dates vertically without the -50% X translation (since width is 100%)
+  .is-info .bottom-left-dates {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translate(0, -20px) scale(0.9) !important;
   }
 
   .scroll-hint   { display: none; }
