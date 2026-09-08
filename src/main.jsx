@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 
 import "./main.scss";
 import ErrorBoundary from "./Components/ErrorBoundary";
@@ -30,7 +31,9 @@ function App() {
 const container = document.getElementById("root");
 const root = container._reactRoot || (container._reactRoot = ReactDOM.createRoot(container));
 root.render(
-  <ErrorBoundary>
-    <App />
-  </ErrorBoundary>
+  <HelmetProvider>
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  </HelmetProvider>
 );

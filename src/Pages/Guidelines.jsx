@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import "./Guidelines.scss";
 
 const DOCS = [
@@ -70,6 +71,10 @@ const ICONS = {
 function Guidelines() {
   return (
     <main className="guidelines-page">
+      <Helmet>
+        <title>Guidelines - Daksha'26</title>
+        <meta name="description" content="Official guidelines and rulebook for Daksha'26 Arts Fest." />
+      </Helmet>
       <div className="guidelines-header">
         <p className="guidelines-header__eyebrow">Official Documents</p>
         <h1 className="guidelines-header__title">Guidelines &amp; Rulebook</h1>

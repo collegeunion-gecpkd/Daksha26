@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 import Spinner from "../Components/Spinner";
+import { Helmet } from "react-helmet-async";
 import "./Board.scss";
 
 // Normalizer for the 6 official batches
@@ -135,6 +136,10 @@ function Board() {
 
   return (
     <main className="board--box">
+      <Helmet>
+        <title>Leader Board - Daksha'26</title>
+        <meta name="description" content="Live standings and leaderboard for Daksha'26 Arts Fest." />
+      </Helmet>
       <div className="title--box">
         <h1>Leader Board</h1>
         <div className="board-status-row">

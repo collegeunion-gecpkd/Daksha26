@@ -43,8 +43,8 @@ function Navbar() {
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY;
-      const vh      = window.innerHeight;
-      setIsScrolled(scrollY > vh * 0.12);
+      const threshold = isLandingPage ? window.innerHeight * 0.12 : 20;
+      setIsScrolled(scrollY > threshold);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -52,13 +52,14 @@ function Navbar() {
   }, [isLandingPage]);
 
   return (
-    <header
-      className={[
-        "navbar",
-        isLandingPage ? "navbar--landing" : "",
-        isScrolled ? "navbar--scrolled" : "",
-      ].filter(Boolean).join(" ")}
-    >
+    <>
+      <header
+        className={[
+          "navbar",
+          isLandingPage ? "navbar--landing" : "",
+          isScrolled ? "navbar--scrolled" : "",
+        ].filter(Boolean).join(" ")}
+      >
       <div className="navbar__container">
 
         {/* ── Logo (visible only when scrolled) ─────────────── */}
@@ -100,18 +101,6 @@ function Navbar() {
           Register
         </Link>
 
-        {/* ── Mobile hamburger ──────────────────────────────── */}
-        <button
-          type="button"
-          className={`navbar__hamburger${isMenuOpen ? " navbar__hamburger--open" : ""}`}
-          onClick={toggleMenu}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-menu"
-        >
-          <span className="navbar__hamburger-bar" />
-          <span className="navbar__hamburger-bar" />
-        </button>
       </div>
 
       {/* ── Mobile menu overlay ─────────────────────────────── */}
@@ -153,6 +142,24 @@ function Navbar() {
         </Link>
       </div>
     </header>
+
+    {/* ── Mobile hamburger ──────────────────────────────── */}
+    <button
+      type="button"
+      className={[
+        "navbar__hamburger",
+        isMenuOpen ? "navbar__hamburger--open" : "",
+        isLandingPage ? "navbar__hamburger--landing" : ""
+      ].filter(Boolean).join(" ")}
+      onClick={toggleMenu}
+      aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+      aria-expanded={isMenuOpen}
+      aria-controls="mobile-menu"
+    >
+      <span className="navbar__hamburger-bar" />
+      <span className="navbar__hamburger-bar" />
+    </button>
+    </>
   );
 }
 

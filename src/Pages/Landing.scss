@@ -233,7 +233,7 @@ html[data-landing-scroll] {
   position: absolute;
   font-size: 0.65rem;
   letter-spacing: 0.25em;
-  color: $color-gray-500;
+  color: $color-white;
   text-transform: uppercase;
   line-height: 1.6;
 
@@ -245,7 +245,7 @@ html[data-landing-scroll] {
   top: clamp(28px, 4vh, 50px);
   left: clamp(28px, 4vw, 60px);
   padding-left: 10px;
-  border-left: 2px solid rgba(255, 255, 255, 0.18);
+  border-left: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .bottom-right {
@@ -253,6 +253,7 @@ html[data-landing-scroll] {
   right: clamp(28px, 4vw, 60px);
   font-size: clamp(0.78rem, 1.2vw, 0.92rem);
   letter-spacing: 0.3em;
+  color: $color-white;
 }
 
 
@@ -355,6 +356,8 @@ html[data-landing-scroll] {
       padding-bottom: 4px;
       border-bottom: 2px solid $color-red;
       cursor: default;
+      text-shadow: none;
+      filter: none;
       transform-origin: bottom center;
       transition:
         color 0.2s $ease-quart-out,
@@ -374,9 +377,10 @@ html[data-landing-scroll] {
   .month-row {
     font-size: clamp(0.82rem, 1.3vw, 1rem);
     letter-spacing: 0.38em;
-    color: $color-gray-400;
+    color: $color-white;
     margin-top: 0.35rem;
     padding-left: 2px;
+    text-shadow: none;
     .red-text { color: $color-red; }
   }
 }
@@ -523,7 +527,7 @@ html[data-landing-scroll] {
 .info-footer {
   font-size: clamp(0.76rem, 1.2vw, 0.92rem);
   letter-spacing: 0.35em;
-  color: $color-gray-400;
+  color: $color-white;
   text-transform: uppercase;
   opacity: 0;
   margin-top: auto;
@@ -635,7 +639,7 @@ html[data-landing-scroll] {
   .section-info  { transform: none; }
   .is-info .section-info { transform: none; }
 
-  // Mobile info-panel: starts from top, cleanly padded below the header
+  // Mobile info-panel: nicely centered vertically on the screen
   .info-panel {
     position: absolute;
     top: 0;
@@ -649,38 +653,59 @@ html[data-landing-scroll] {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
-    padding: clamp(4.5rem, 12vh, 6rem) clamp(20px, 6vw, 36px) clamp(2rem, 5vh, 3.5rem);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.98) 75%, rgba(0, 0, 0, 0.9) 100%);
+    padding: clamp(5rem, 14vh, 7rem) clamp(20px, 6vw, 36px) clamp(2rem, 6vh, 3.5rem);
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.82) 40%,
+      rgba(0, 0, 0, 0.94) 100%
+    );
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 1.5rem;
+    justify-content: center;
+    gap: 1.8rem;
   }
 
-  .info-accent-bar { display: none; }
+  .info-accent-bar {
+    display: block;
+    width: 36px;
+    margin-bottom: -0.5rem;
+  }
 
   .info-footer {
     display: block;
     font-size: 0.75rem;
     letter-spacing: 0.3em;
     text-align: center;
-    margin-top: auto;
-    padding-top: 1.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.8rem;
   }
 
-  .bg-overlay--left,
+  .bg-overlay--left {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.75) 0%,
+      rgba(0, 0, 0, 0.45) 50%,
+      rgba(0, 0, 0, 0.85) 100%
+    );
+    opacity: 1;
+    transition: opacity $snap-ms $snap-ease;
+  }
+
   .bg-overlay--right {
     background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.95) 0%,
-      rgba(0, 0, 0, 0.5)  50%,
-      rgba(0, 0, 0, 0.1)  100%
+      to bottom,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.5) 45%,
+      rgba(0, 0, 0, 0.88) 100%
     );
+    opacity: 0;
+    transition: opacity $snap-ms $snap-ease;
   }
 
-  .bg-overlay--left  { opacity: 1; }
-  .bg-overlay--right { opacity: 0; }
+  .is-info .bg-overlay--left  { opacity: 0.3; }
+  .is-info .bg-overlay--right { opacity: 0.75; }
 }
 
 // ── Reduced motion ────────────────────────────────────────────

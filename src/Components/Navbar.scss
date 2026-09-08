@@ -34,9 +34,11 @@
   }
 
   &--scrolled {
-    background-color: transparent;
-    backdrop-filter: none;
-    box-shadow: none;
+    background-color: rgba(9, 9, 9, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   }
 
   // ── Container ───────────────────────────────────────────
@@ -182,55 +184,6 @@ html[data-landing-view="info"] .navbar--landing {
     }
   }
 
-  // ── Hamburger (mobile only) ────────────────────────────────
-  &__hamburger {
-    display: none;
-    position: relative;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-    cursor: pointer;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 6px;
-    transition: border-color 0.2s $ease-quart-out, background-color 0.2s $ease-quart-out;
-    -webkit-tap-highlight-color: transparent;
-
-    &:hover,
-    &:focus-visible {
-      border-color: rgba(255, 255, 255, 0.3);
-      outline: none;
-    }
-
-    &--open {
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-  }
-
-  &__hamburger-bar {
-    display: block;
-    width: 18px;
-    height: 1.5px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 1px;
-    transition: transform 0.3s $ease-quart-out, opacity 0.3s $ease-quart-out;
-
-    .navbar__hamburger--open &:first-child {
-      transform: translateY(3.75px) rotate(45deg);
-    }
-
-    .navbar__hamburger--open &:last-child {
-      transform: translateY(-3.75px) rotate(-45deg);
-    }
-  }
-
   // ── Mobile menu overlay ────────────────────────────────────
   &__mobile-menu {
     position: fixed;
@@ -331,17 +284,6 @@ html[data-landing-view="info"] .navbar--landing {
       display: none;
     }
 
-    &__hamburger {
-      display: inline-flex;
-    }
-
-    &--landing {
-      .navbar__hamburger {
-        opacity: 1 !important;
-        pointer-events: auto !important;
-      }
-    }
-
     &__logo {
       opacity: 1;
       pointer-events: auto;
@@ -350,5 +292,65 @@ html[data-landing-view="info"] .navbar--landing {
     &--landing &__logo-img {
       opacity: 0;
     }
+  }
+}
+
+// ── Hamburger (moved outside .navbar nesting) ─────────────────
+.navbar__hamburger {
+  display: none;
+  position: fixed;
+  top: 13px;
+  right: clamp(1rem, 4vw, 3rem);
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: rgba(18, 18, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 10001;
+  transition: border-color 0.2s $ease-quart-out, background-color 0.2s $ease-quart-out, opacity 0.45s $ease-quart-out;
+  -webkit-tap-highlight-color: transparent;
+
+  &--landing {
+    opacity: var(--daksha-progress, 0);
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(30, 30, 30, 0.95);
+    outline: none;
+  }
+
+  &--open {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(25, 25, 25, 0.9);
+  }
+  
+  @media screen and (max-width: #{$bp-lg}) {
+    display: inline-flex;
+  }
+}
+
+.navbar__hamburger-bar {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 1px;
+  transition: transform 0.3s $ease-quart-out, opacity 0.3s $ease-quart-out;
+
+  .navbar__hamburger--open &:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+
+  .navbar__hamburger--open &:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
   }
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 import Spinner from "../Components/Spinner";
+import { Helmet } from "react-helmet-async";
 import "./Events.scss";
 
 const FILTER_CHIPS = [
@@ -264,6 +265,10 @@ function Events() {
 
   return (
     <>
+      <Helmet>
+        <title>Events - Daksha'26</title>
+        <meta name="description" content="Explore and register for onstage and offstage events at Daksha'26 Arts Fest." />
+      </Helmet>
       <div className="title--box">
         <h1>Events</h1>
         <input

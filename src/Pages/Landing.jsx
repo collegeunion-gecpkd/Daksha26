@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import "./Landing.scss";
 import DakshaTitle from "../assets/dakshafont.webp";
 import HeroBG from "../assets/dakshaBG.webp";
@@ -124,6 +125,36 @@ function Landing() {
 
   return (
     <main className={`landing ${isRevealed ? "landing--revealed" : ""}`}>
+      <Helmet>
+        <title>Daksha'26 — Arts Fest | GEC Palakkad</title>
+        <meta name="description" content="Daksha'26 is the annual Arts Fest of Government Engineering College Palakkad, presented by the Secular College Union. September 22, 23 & 24." />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Festival",
+              "name": "Daksha'26",
+              "description": "Annual Arts & Cultural Fest of Government Engineering College, Palakkad",
+              "startDate": "2026-09-22T09:00:00+05:30",
+              "endDate": "2026-09-24T23:59:59+05:30",
+              "location": {
+                "@type": "Place",
+                "name": "Government Engineering College, Palakkad",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Sreekrishnapuram",
+                  "addressRegion": "Kerala",
+                  "addressCountry": "IN"
+                }
+              },
+              "organizer": {
+                "@type": "Organization",
+                "name": "Secular College Union"
+              }
+            }
+          `}
+        </script>
+      </Helmet>
       <div className="landing-scroll-root" ref={rootRef}>
         <div className="bg-pin" ref={pinRef}>
 
@@ -139,6 +170,7 @@ function Landing() {
 
           <section className="section-hero" aria-label="Daksha'26">
             <div className="hero-layer">
+              <h1 className="sr-only">Daksha'26 Arts Fest GEC Palakkad</h1>
               <div className="corner-text top-left anim-fade-in-down">
                 <p>ഗവ. എഞ്ചിനീയറിംഗ് കോളേജ്</p>
                 <p>പാലക്കാട്</p>
