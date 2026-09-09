@@ -207,6 +207,9 @@ function Landing() {
             <div className="month-row">
               <span className="red-text">S E P</span> T E M B E R
             </div>
+            <div className="mobile-info-callout" aria-hidden="true">
+              Click here
+            </div>
           </div>
 
           <section className="section-info" id="info" aria-label="About Daksha'26">

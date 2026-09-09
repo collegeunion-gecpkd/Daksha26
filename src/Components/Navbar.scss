@@ -279,9 +279,19 @@ html[data-landing-view="info"] .navbar--landing {
 // ── Responsive ─────────────────────────────────────────────
 @media screen and (max-width: #{$bp-lg}) {
   .navbar {
-    &__nav,
-    &__cta {
+    &__nav {
       display: none;
+    }
+
+    &__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 42px;
+      padding: 0 1.2rem;
+      margin-right: 3.5rem;
+      border-radius: 999px;
+      opacity: var(--daksha-progress, 0);
     }
 
     &__logo {

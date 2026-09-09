@@ -375,6 +375,10 @@ html[data-landing-scroll] {
   z-index: 2;
   transition: opacity 0.35s ease, transform 0.35s ease;
 
+  .mobile-info-callout {
+    display: none;
+  }
+
   .dates-row {
     display: flex;
     align-items: flex-end;
@@ -679,6 +683,26 @@ html[data-landing-scroll] {
 
     .month-row {
       text-align: center;
+    }
+
+    .mobile-info-callout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 3rem;
+      padding: 0.42rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: $color-white;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      pointer-events: none;
+      user-select: none;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
     }
   }
 
