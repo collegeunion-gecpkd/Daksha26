@@ -440,8 +440,8 @@ function Events() {
                     <input type="tel" id="Phone" name="Phone" value={formData.Phone} onChange={handleInputChange} required placeholder="e.g. 9876543210" />
                   </div>
 
-                  <div className="form-group-row" style={{display: 'flex', gap: '1rem'}}>
-                    <div className="form-group" style={{flex: 1}}>
+                  <div className="form-group-row">
+                    <div className="form-group form-group--inline">
                       <label htmlFor="Department">Department</label>
                       <select id="Department" name="Department" value={formData.Department} onChange={handleInputChange} required>
                         <option value="" disabled>Select dept</option>
@@ -454,7 +454,7 @@ function Events() {
                       </select>
                     </div>
 
-                    <div className="form-group" style={{flex: 1}}>
+                    <div className="form-group form-group--inline">
                       <label htmlFor="Year">Year of Study</label>
                       <select id="Year" name="Year" value={formData.Year} onChange={handleInputChange} required>
                         <option value="" disabled>Select year</option>

@@ -323,7 +323,7 @@ html[data-landing-view="info"] .navbar--landing {
   justify-content: center;
   flex-direction: column;
   gap: 5px;
-  z-index: 10001;
+  z-index: 1000;
   transition: border-color 0.2s $ease-quart-out, background-color 0.2s $ease-quart-out, opacity 0.45s $ease-quart-out;
   -webkit-tap-highlight-color: transparent;
 

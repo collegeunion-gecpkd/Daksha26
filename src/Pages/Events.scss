@@ -385,10 +385,16 @@
   flex-direction: column;
   gap: 1.25rem;
 
+  .form-group-row {
+    display: flex;
+    gap: 1rem;
+  }
+
   .form-group {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    flex: 1;
 
     label {
       font-size: 0.85rem;
@@ -421,6 +427,19 @@
         background: #111111;
         color: #ffffff;
       }
+    }
+  }
+
+  @media (max-width: 640px) {
+    .form-group-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group--inline {
+      width: 100%;
+      flex: 1 1 auto;
     }
   }
 }
