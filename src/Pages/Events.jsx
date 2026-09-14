@@ -28,6 +28,16 @@ function formatDisplayTime(timeStr) {
   return str;
 }
 
+function getRegistrationStatusRank(status) {
+  const normalized = String(status || "").trim().toLowerCase();
+
+  if (normalized === "open") return 0;
+  if (normalized.includes("will open soon")) return 1;
+  if (normalized === "closed") return 2;
+
+  return 99;
+}
+
 function getEventDetails(row) {
   if (!row) return {};
   const regStatus = String(row.RegistrationStatus || row.RegistrationLink || "").trim();
@@ -158,51 +168,62 @@ function Events() {
   };
 
   const filteredEvents = Array.isArray(eventData)
-    ? eventData.filter((event) => {
-        if (!event) return false;
+    ? eventData
+        .filter((event) => {
+          if (!event) return false;
 
-        // Filter chip logic
-        if (activeFilter !== "all") {
-          const dateStr = String(event.EventDate || "").toLowerCase();
-          const catStr = String(event.EventCategory || "").toLowerCase();
+          // Filter chip logic
+          if (activeFilter !== "all") {
+            const dateStr = String(event.EventDate || "").toLowerCase();
+            const catStr = String(event.EventCategory || "").toLowerCase();
 
-          if (activeFilter === "Offstage") {
-            const isOffstage =
-              catStr === "offstage" ||
-              dateStr.includes("offstage") ||
-              dateStr.includes("sep 16") ||
-              dateStr.includes("sep 17");
-            if (!isOffstage) return false;
-          } else if (activeFilter === "Day 1") {
-            const isDay1 = dateStr.includes("day 1") || dateStr.includes("sep 22");
-            if (!isDay1) return false;
-          } else if (activeFilter === "Day 2") {
-            const isDay2 = dateStr.includes("day 2") || dateStr.includes("sep 23");
-            if (!isDay2) return false;
-          } else if (activeFilter === "Day 3") {
-            const isDay3 = dateStr.includes("day 3") || dateStr.includes("sep 24");
-            if (!isDay3) return false;
+            if (activeFilter === "Offstage") {
+              const isOffstage =
+                catStr === "offstage" ||
+                dateStr.includes("offstage") ||
+                dateStr.includes("sep 16") ||
+                dateStr.includes("sep 17");
+              if (!isOffstage) return false;
+            } else if (activeFilter === "Day 1") {
+              const isDay1 = dateStr.includes("day 1") || dateStr.includes("sep 22");
+              if (!isDay1) return false;
+            } else if (activeFilter === "Day 2") {
+              const isDay2 = dateStr.includes("day 2") || dateStr.includes("sep 23");
+              if (!isDay2) return false;
+            } else if (activeFilter === "Day 3") {
+              const isDay3 = dateStr.includes("day 3") || dateStr.includes("sep 24");
+              if (!isDay3) return false;
+            }
           }
-        }
 
-        // Text search matching
-        const term = searchTerm.trim().toLowerCase();
-        if (!term) return true;
-        const matches = (val) => val != null && String(val).toLowerCase().includes(term);
-        return (
-          matches(event.EventName) ||
-          matches(event.Winner1) ||
-          matches(event.Winner2) ||
-          matches(event.Winner3) ||
-          matches(event.Winner1Year) ||
-          matches(event.Winner2Year) ||
-          matches(event.Winner3Year) ||
-          matches(event.EventDate) ||
-          matches(event.EventStage) ||
-          matches(event.EventState) ||
-          matches(event.EventCategory)
-        );
-      })
+          // Text search matching
+          const term = searchTerm.trim().toLowerCase();
+          if (!term) return true;
+          const matches = (val) => val != null && String(val).toLowerCase().includes(term);
+          return (
+            matches(event.EventName) ||
+            matches(event.Winner1) ||
+            matches(event.Winner2) ||
+            matches(event.Winner3) ||
+            matches(event.Winner1Year) ||
+            matches(event.Winner2Year) ||
+            matches(event.Winner3Year) ||
+            matches(event.EventDate) ||
+            matches(event.EventStage) ||
+            matches(event.EventState) ||
+            matches(event.EventCategory)
+          );
+        })
+        .sort((a, b) => {
+          const statusA = getRegistrationStatusRank(a?.RegistrationStatus || a?.RegistrationLink || "");
+          const statusB = getRegistrationStatusRank(b?.RegistrationStatus || b?.RegistrationLink || "");
+
+          if (statusA !== statusB) {
+            return statusA - statusB;
+          }
+
+          return 0;
+        })
     : [];
 
   const openRegistrationModal = (event) => {
