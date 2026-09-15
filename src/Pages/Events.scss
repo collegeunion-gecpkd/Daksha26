@@ -480,6 +480,31 @@
   text-align: center;
 }
 
+.reg-group-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #fef08a;
+  font-size: 0.875rem;
+  line-height: 1.4;
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke: #eab308;
+  }
+
+  strong {
+    color: #fde047;
+    font-weight: 600;
+  }
+}
+
 .reg-success-message {
   display: flex;
   flex-direction: column;

@@ -211,7 +211,8 @@ function Events() {
             matches(event.EventDate) ||
             matches(event.EventStage) ||
             matches(event.EventState) ||
-            matches(event.EventCategory)
+            matches(event.EventCategory) ||
+            matches(event.EventType)
           );
         })
         .sort((a, b) => {
@@ -283,6 +284,10 @@ function Events() {
       setIsSubmitting(false);
     }
   };
+
+  const isGroupEvent =
+    String(activeRegEvent?.EventType || "").trim().toLowerCase() === "group" ||
+    String(activeRegEvent?.Winner1 || "").trim().toLowerCase() === "group";
 
   return (
     <>
@@ -446,6 +451,28 @@ function Events() {
                 <form onSubmit={handleFormSubmit} className="custom-reg-form">
                   {submitError && <div className="reg-error-message">{submitError}</div>}
                   
+                  {isGroupEvent && (
+                    <div className="reg-group-notice" role="note">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="reg-group-notice__icon"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <div>
+                        <strong>Note:</strong> Only one member needs to register on behalf of the entire team.
+                      </div>
+                    </div>
+                  )}
+
                   <div className="form-group">
                     <label htmlFor="Name">Full Name</label>
                     <input type="text" id="Name" name="Name" value={formData.Name} onChange={handleInputChange} required placeholder="e.g. John Doe" />
