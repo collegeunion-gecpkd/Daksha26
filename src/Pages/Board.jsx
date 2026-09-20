@@ -15,16 +15,16 @@ function getBatchInfo(rawYear, rawName) {
     return { name: "M.Tech 1st Year", tag: "MTech First", key: "mtech-1" };
   }
   if (str.includes("fourth") || str.includes("4th") || str.includes("year 4")) {
-    return { name: "4th Year", tag: "Fourth", key: "fourth" };
+    return { name: "കലാവ്യൂഹ", tag: "4th Year", key: "fourth" };
   }
   if (str.includes("third") || str.includes("3rd") || str.includes("year 3")) {
-    return { name: "3rd Year", tag: "Third", key: "third" };
+    return { name: "KSHATRA", tag: "3rd Year", key: "third" };
   }
   if (str.includes("second") || str.includes("2nd") || str.includes("year 2")) {
-    return { name: "2nd Year", tag: "Second", key: "second" };
+    return { name: "ധൃതംഗ്", tag: "2nd Year", key: "second" };
   }
   if (str.includes("first") || str.includes("1st") || str.includes("year 1")) {
-    return { name: "1st Year", tag: "First", key: "first" };
+    return { name: "THAKAJAM", tag: "1st Year", key: "first" };
   }
   return { name: rawName || "Batch", tag: rawYear || "", key: rawName || "other" };
 }
