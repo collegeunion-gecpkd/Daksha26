@@ -18,13 +18,13 @@ function getBatchInfo(rawYear, rawName) {
     return { name: "കലാവ്യൂഹ", tag: "4th Year", key: "fourth" };
   }
   if (str.includes("third") || str.includes("3rd") || str.includes("year 3")) {
-    return { name: "KSHATRA", tag: "3rd Year", key: "third" };
+    return { name: "ക്ഷാത്ര", tag: "3rd Year", key: "third" };
   }
   if (str.includes("second") || str.includes("2nd") || str.includes("year 2")) {
     return { name: "ധൃതംഗ്", tag: "2nd Year", key: "second" };
   }
   if (str.includes("first") || str.includes("1st") || str.includes("year 1")) {
-    return { name: "THAKAJAM", tag: "1st Year", key: "first" };
+    return { name: "തകജം", tag: "1st Year", key: "first" };
   }
   return { name: rawName || "Batch", tag: rawYear || "", key: rawName || "other" };
 }
@@ -194,7 +194,12 @@ function Board() {
                     </td>
                     <td className="td-batch">
                       <div className="batch-name-wrap">
-                        <span className="batch-name">{batch.name}</span>
+                        <span 
+                          className="batch-name" 
+                          style={{ fontFamily: "'Noto Sans Malayalam', 'Anek Malayalam', 'Manjari', sans-serif", letterSpacing: "0.5px" }}
+                        >
+                          {batch.name}
+                        </span>
                         <span className="batch-tag">{batch.tag}</span>
                       </div>
                       <div className="batch-bar-track">
