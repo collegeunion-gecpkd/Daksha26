@@ -18,7 +18,7 @@ function getBatchInfo(rawYear, rawName) {
     return { name: "കലാവ്യൂഹ", tag: "4th Year", key: "fourth" };
   }
   if (str.includes("third") || str.includes("3rd") || str.includes("year 3")) {
-    return { name: "ക്ഷാത്ര", tag: "3rd Year", key: "third" };
+    return { name: "ക്ഷത്ര", tag: "3rd Year", key: "third" };
   }
   if (str.includes("second") || str.includes("2nd") || str.includes("year 2")) {
     return { name: "ധൃതംഗ്", tag: "2nd Year", key: "second" };
